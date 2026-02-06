@@ -1,0 +1,276 @@
+/* Root variables for easy theme management */
+:root {
+    --dark-bg: #101010;
+    --primary-neon: #9f00ff; /* Electric Purple */
+    --secondary-neon: #00f2ff; /* Cyan */
+    --text-light: #f0f0f0;
+    --text-dark: #333;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif; /* Modern, clean font */
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- Header & Navigation --- */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(16, 16, 16, 0.9); /* Dark semi-transparent */
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    z-index: 1000;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-light);
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    cursor:pointer;
+}
+
+.logo img {
+    height: 70px;
+    width: auto;
+    margin-right: 5px;
+}
+
+.main-header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+    align-items: center;
+}
+
+.main-header nav ul li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.main-header nav ul li a:hover {
+    color: var(--primary-neon);
+}
+
+.cta-nav {
+    border: 1px solid var(--primary-neon);
+    padding: 8px 24px;
+    border-radius: 50px;
+}
+
+.cta-nav:hover {
+    background: var(--primary-neon);
+    color: #fff !important;
+    box-shadow: 0 0 15px var(--primary-neon);
+}
+
+/* --- Hero Section --- */
+#hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#hero video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+#hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+}
+
+.hero-headline {
+    font-size: 5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    animation: fadeInDown 1s ease-out;
+}
+
+/* --- Buttons & CTAs --- */
+.btn {
+    padding: 12px 28px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+}
+
+.btn-primary {
+    background-color: var(--primary-neon);
+    color: var(--text-light);
+    box-shadow: 0 0 15px var(--primary-neon);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px var(--primary-neon);
+}
+
+/* --- Dance Styles Grid --- */
+#styles {
+    background: linear-gradient(to bottom, #101010, #1a1a1a);
+}
+.styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.style-card {
+    background: #1a1a1a;
+    padding: 50px 20px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s;
+    overflow: hidden;
+}
+
+.style-card:hover {
+    transform: scale(1.05);
+    border-color: var(--secondary-neon);
+}
+
+/* --- Animations --- */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Contact Section --- */
+#contact {
+    padding: 100px 20px;
+    text-align: center;
+    background: linear-gradient(to top, #050505, #101010);
+}
+
+#contact h2 {
+    font-size: 3rem;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--secondary-neon);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
+
+.contact-form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.contact-form button {
+    align-self: center;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 200px;
+    cursor: pointer;
+    border: none;
+}
+
+#form-status {
+    margin-top: 15px;
+    font-weight: 600;
+    min-height: 24px;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .hero-headline {
+        font-size: 3rem;
+    }
+    .main-header nav {
+        display: none; /* Simplification for mobile; consider a hamburger menu */
+    }
+}
+/* --- Neon Glow Effect on Hover --- */
+.style-card::before {
+    content: '';
+    position: absolute;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, var(--secondary-neon) 0%, transparent 80%);
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    pointer-events: none;
+}
+
+.style-card:hover::before {
+    width: 150px;
+    height: 150px;
+    opacity: 0.1;
+}

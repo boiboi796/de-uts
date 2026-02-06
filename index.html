@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Ultimate Steppers | Move. Feel. Become.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="main-header">
+        <div class="logo"><img src="./img/ultimatelogo.png" alt="">De Ultimate Steppers</div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#styles">Styles</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="https://forms.gle/vcTx3y6xUe7KPxef6" class="cta-nav" target="_blank">Join</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <video src="./img/deutsbody.mp4" autoplay loop muted></video>
+        <div class="hero-content">
+            <h1 class="hero-headline">Move. Feel. Become.</h1>
+            <div class="hero-cta">
+                <a href="https://forms.gle/vcTx3y6xUe7KPxef6" class="btn btn-primary" target="_blank">Join the Crew</a>
+                <a  href="https://www.youtube.com/@deultimatesteppers" class="btn btn-secondary" target="_blank">Watch Performances</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>Our Story</h2>
+        <p>Within the historic walls of the University of Ibadan, where excellence, culture, and ambition have thrived for generations, a different kind of legacy began to rise — one written not with ink, but with movement.
+
+De Ultimate Steppers was born from a shared belief among passionate dancers who understood that dance is more than rhythm and routine; it is identity in motion. What started as simple training sessions on campus — driven by raw passion, late rehearsals, and unbreakable dedication — slowly evolved into a powerful collective known for energy, discipline, and unmistakable presence.
+
+We are a product of our environment: bold, resilient, and creative. The University of Ibadan did not just shape our minds; it shaped our artistry. Between lectures and life, we found expression in dance — transforming open spaces into stages and music into motivation. Every step we take reflects the spirit of growth, excellence, and unity that defines UI.
+
+At De Ultimate Steppers, dance is a language. A language spoken through Afro-inspired rhythms, street styles, contemporary expression, and freestyle energy. Each performance tells a story — of commitment, teamwork, and the courage to stand out. We do not chase trends; we refine craft. We do not imitate; we innovate.
+
+More than a dance crew, we are a family. A brotherhood and sisterhood built on respect, consistency, and shared vision. We train our bodies with intensity and our minds with focus, knowing that greatness is earned through discipline and belief. Every rehearsal is a step forward; every performance is a statement.
+
+Our mission is clear: to inspire, to represent, and to elevate dance culture within and beyond the University of Ibadan. We perform with pride, knowing that each stage we step on carries our roots, our story, and our future</p>
+    </section>
+
+    <!-- Dance Styles Section -->
+    <section id="styles">
+        <center><h2>Find Your Rhythm</h2></center> 
+        <div class="styles-grid">
+            <div class="style-card"><h3>Hip-Hop</h3></div>
+            <div class="style-card"><h3>Afro</h3></div>
+            <div class="style-card"><h3>Contemporary</h3></div>
+            <div class="style-card"><h3>Breakdance</h3></div>
+            <div class="style-card"><h3>Freestyle</h3></div>
+        </div>
+    </section>
+
+    <!-- Classes / Events Section -->
+    <section id="classes">
+        <h2>Class Schedule</h2>
+        <div class="schedule">
+            <!-- Schedule items will be dynamically added or statically listed here -->
+            <div class="schedule-item">
+                <span class="date">MON, 7 PM</span>
+                <span class="title">Intro to Hip-Hop</span>  
+                <span class="instructor">with Alex</span>
+                <span class="level">Beginner</span>
+            </div>
+            <div class="schedule-item">
+                <span class="date">WED, 8 PM</span>
+                <span class="title">Contemporary Flow</span>
+                <span class="instructor">with Maya</span>
+                <span class="level">Intermediate</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <h2>Gallery</h2>
+        <div class="video-gallery">
+            <!-- Video thumbnails will go here -->
+            <div class="video-item"><!-- Video Thumbnail --></div>
+            <div class="video-item"><!-- Video Thumbnail --></div>
+            <div class="video-item"><!-- Video Thumbnail --></div>
+        </div>
+    </section>
+
+    <!-- Join / Contact Section -->
+    <section id="contact">
+        <h2>Join The Movement</h2>
+        <form id="contact-form" class="contact-form" action="https://formspree.io/f/mreqryno" method="POST">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Your Message"></textarea>
+            <button type="submit" class="btn btn-primary">Send</button>
+            <p id="form-status"></p>
+        </form>
+        <div class="social-links">
+            <!-- Social Media Icons -->
+        </div>
+    </section>
+
+    <footer>
+        <center><p>&copy; <small>2026 De Ultimate Steppers. All rights reserved.</small></p></center>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
