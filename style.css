@@ -13,6 +13,12 @@ body {
     font-family: 'Montserrat', sans-serif; /* Modern, clean font */
     margin: 0;
     line-height: 1.6;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 /* --- Header & Navigation --- */
@@ -45,7 +51,7 @@ body {
 }
 
 .logo img {
-    height: 70px;
+    height: 90px;
     width: auto;
     margin-right: 5px;
 }
@@ -144,40 +150,270 @@ body {
     box-shadow: 0 0 25px var(--primary-neon);
 }
 
+/* --- About Section --- */
+#about {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-top: 3px solid var(--primary-neon);
+    border-bottom: 3px solid var(--secondary-neon);
+    position: relative;
+}
+
+#about::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 8px;
+    background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+    border-radius: 4px;
+}
+
+#about::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 8px;
+    background: linear-gradient(90deg, var(--secondary-neon), var(--primary-neon));
+    border-radius: 4px;
+}
+
+#about h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
 /* --- Dance Styles Grid --- */
 #styles {
     background: linear-gradient(to bottom, #101010, #1a1a1a);
+    padding: 50px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 .styles-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
+    padding: 0 20px;
 }
 
 .style-card {
     background: #1a1a1a;
-    padding: 50px 20px;
+    padding: 20px;
     text-align: center;
     border: 2px solid transparent;
-    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s, box-shadow 0.4s;
     overflow: hidden;
+    border-radius: 12px;
+    position: relative;
 }
 
 .style-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
     border-color: var(--secondary-neon);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.3), inset 0 0 20px rgba(159, 0, 255, 0.1);
 }
 
-/* --- Animations --- */
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.style-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 15px 0;
+    transition: transform 0.4s ease, filter 0.4s ease;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+.style-card:hover .style-image {
+    transform: scale(1.05) rotate(1deg);
+    filter: brightness(1) contrast(1.2) drop-shadow(0 0 15px var(--secondary-neon));
+}
+
+/* --- Classes / Events Section --- */
+#classes {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(to bottom, #101010, #1a1a1a);
+    border-left: 4px solid var(--secondary-neon);
+    border-right: 4px solid var(--primary-neon);
+    position: relative;
+}
+
+#classes h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.schedule-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px 30px;
+    border-radius: 8px;
+    border-left: 3px solid var(--secondary-neon);
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.schedule-item:hover {
+    background: rgba(159, 0, 255, 0.1);
+    border-left-color: var(--primary-neon);
+    box-shadow: 0 0 20px rgba(159, 0, 255, 0.2);
+}
+
+.schedule-item span {
+    flex: 1;
+    min-width: 150px;
+}
+
+.schedule-item .date {
+    font-weight: 600;
+    color: var(--secondary-neon);
+}
+
+.schedule-item .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.schedule-item .level {
+    background: var(--primary-neon);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+/* --- Updates/Carousel Section --- */
+#updates {
+    background: linear-gradient(to bottom, #1a1a1a, #101010);
+    padding: 50px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#updates h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(159, 0, 255, 0.7);
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: var(--primary-neon);
+    box-shadow: 0 0 20px var(--primary-neon);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.dot.active {
+    background: var(--secondary-neon);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 10px var(--secondary-neon);
+}
+
+.updatetext {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.updatetext:not(:empty) {
+    display: block;
 }
 
 /* --- Contact Section --- */
@@ -185,6 +421,21 @@ body {
     padding: 100px 20px;
     text-align: center;
     background: linear-gradient(to top, #050505, #101010);
+    max-width: 1400px;
+    margin: 0 auto;
+    /* border-top: 3px dashed var(--secondary-neon); */
+    border-bottom: 3px dashed var(--primary-neon);
+    position: relative;
+}
+
+#contact::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-neon), transparent);
 }
 
 #contact h2 {
@@ -243,6 +494,57 @@ body {
     font-weight: 600;
     min-height: 24px;
 }
+
+/* --- updatetext --- */
+#updatetext {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 30px;
+    border-radius: 8px;
+    border-left: 3px solid var(--secondary-neon);
+    transition: all 0.3s ease;
+    display: none;
+    margin-top: 20px;
+}
+#updatetext:hover {
+    background: rgba(159, 0, 255, 0.1);
+    border-left-color: var(--primary-neon);
+    box-shadow: 0 0 20px rgba(159, 0, 255, 0.2);
+}
+#updatetext button {
+    background: var(--secondary-neon);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+}
+/* --- Animations --- */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
