@@ -5,6 +5,7 @@
     --secondary-neon: #00f2ff; /* Cyan */
     --text-light: #f0f0f0;
     --text-dark: #333;
+    --header-height: 140px; /* space for fixed header */
 }
 
 body {
@@ -15,6 +16,7 @@ body {
     line-height: 1.6;
     box-sizing: border-box;
     overflow-x: hidden;
+    padding-top: var(--header-height);
 }
 
 * {
@@ -27,6 +29,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    height: var(--header-height);
     padding: 20px 50px;
     display: flex;
     justify-content: space-between;
@@ -54,6 +57,11 @@ body {
     height: 90px;
     width: auto;
     margin-right: 5px;
+}
+
+/* Ensure sections do not hide under fixed header when navigated to */
+section {
+    scroll-margin-top: var(--header-height);
 }
 
 .main-header nav ul {
@@ -92,7 +100,7 @@ body {
 
 /* --- Hero Section --- */
 #hero {
-    height: 100vh;
+    height: calc(100vh - var(--header-height));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,12 +129,27 @@ body {
     background: rgba(0, 0, 0, 0.6);
     z-index: -1;
 }
-
+button{
+    white-space: nowrap;
+}
 .hero-headline {
     font-size: 5rem;
     font-weight: 700;
     text-transform: uppercase;
     animation: fadeInDown 1s ease-out;
+}
+
+/* --- Hero CTA Wrapping --- */
+.hero-cta .adjust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.hero-cta .btn {
+    margin: 0;
 }
 
 /* --- Buttons & CTAs --- */
@@ -548,6 +571,9 @@ body {
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
+    :root {
+        --header-height: 72px;
+    }
     .hero-headline {
         font-size: 3rem;
     }
@@ -555,25 +581,22 @@ body {
         display: none; /* Simplification for mobile; consider a hamburger menu */
     }
     .main-header {
-        padding: 12px 16px;
+        padding: 8px 12px; /* Adjusted padding for a tighter header */
     }
     .logo {
         font-size: 1.2rem;
         letter-spacing: 0.5px;
     }
     .logo img {
-        height: 48px;
+        height: calc(var(--header-height) - 16px); /* Adjusted logo height */
         margin-right: 8px;
     }
     #hero {
-        height: 90vh;
+        height: calc(90vh - var(--header-height));
         padding: 0 16px;
     }
     .hero-cta {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
+        display: block;
     }
     .btn {
         margin: 0;
@@ -612,6 +635,9 @@ body {
 }
 
 @media (max-width: 480px) {
+    :root {
+        --header-height: 60px;
+    }
     .hero-headline {
         font-size: 2.2rem;
     }
@@ -619,7 +645,7 @@ body {
         font-size: 1rem;
     }
     .logo img {
-        height: 40px;
+        height: calc(var(--header-height) - 16px); /* Adjusted logo height */
     }
     .style-image {
         height: 200px;
