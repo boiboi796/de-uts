@@ -114,7 +114,122 @@ https://templatemo.com/tm-596-electric-xtra
             });
         });
 
-        // Keep native form submit behavior so Formspree receives the message.
+        // Handle Formspree submit without redirecting.
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('formStatus');
+
+        function setFormStatus(message, type) {
+            if (!formStatus) return;
+
+            formStatus.textContent = message;
+            formStatus.classList.remove('success', 'error', 'visible');
+
+            if (type) {
+                formStatus.classList.add(type);
+            }
+
+            if (message) {
+                formStatus.classList.add('visible');
+            }
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const submitButton = contactForm.querySelector('.submit-btn');
+                const originalButtonText = submitButton ? submitButton.textContent : '';
+                const formData = new FormData(contactForm);
+
+                setFormStatus('Sending your message...', null);
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Sending...';
+                }
+
+                try {
+                    const response = await fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Unable to send message right now.');
+                    }
+
+                    contactForm.reset();
+                    setFormStatus('Message sent successfully. We will reach out to you soon.', 'success');
+                } catch (error) {
+                    setFormStatus('Message failed to send. Please try again in a moment.', 'error');
+                } finally {
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText;
+                    }
+                }
+            });
+        }
+
+        // Animate gallery images in the first About visual box.
+        const galleryContainer = document.getElementById('aboutGallery');
+
+        if (galleryContainer) {
+            const galleryImages = [
+                'images/gallery/step-01.png',
+                'images/gallery/step-02.png',
+                'images/gallery/step-03.png',
+                'images/gallery/step-04.png',
+                'images/gallery/step-05.png',
+                'images/gallery/step-06.png'
+            ];
+
+            const shuffledImages = [...galleryImages].sort(() => Math.random() - 0.5);
+            const imageElements = [];
+            let activeIndex = 0;
+
+            shuffledImages.forEach((src, index) => {
+                const image = document.createElement('img');
+                image.className = 'gallery-image';
+                image.src = src;
+                image.alt = 'De Ultimate Steppers gallery image';
+                image.loading = 'lazy';
+
+                image.onerror = () => {
+                    image.remove();
+                };
+
+                galleryContainer.appendChild(image);
+                imageElements.push(image);
+
+                if (index === 0) {
+                    image.classList.add('active');
+                }
+            });
+
+            setTimeout(() => {
+                const availableImages = Array.from(galleryContainer.querySelectorAll('.gallery-image'));
+
+                if (!availableImages.length) {
+                    const fallback = document.createElement('div');
+                    fallback.className = 'gallery-fallback';
+                    fallback.textContent = 'Drop photos into images/gallery to power this live showcase.';
+                    galleryContainer.appendChild(fallback);
+                    return;
+                }
+
+                const rotateGallery = () => {
+                    availableImages[activeIndex].classList.remove('active');
+                    activeIndex = (activeIndex + 1) % availableImages.length;
+                    availableImages[activeIndex].classList.add('active');
+                };
+
+                setInterval(rotateGallery, 2600);
+            }, 300);
+        }
 
         // Initialize particles
         createParticles();

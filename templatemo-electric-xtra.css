@@ -1,10 +1,3 @@
-/*
-
-TemplateMo 596 Electric Xtra
-
-https://templatemo.com/tm-596-electric-xtra
-
-*/
 
 @charset "utf-8";
 
@@ -758,6 +751,51 @@ https://templatemo.com/tm-596-electric-xtra
             height: 300px;
             position: relative;
             animation: float 6s ease-in-out infinite;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(9, 14, 35, 0.75);
+        }
+
+        .about-gallery {
+            position: absolute;
+            inset: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 20%, rgba(43, 108, 255, 0.35), rgba(4, 7, 17, 0.95));
+            z-index: 0;
+        }
+
+        .gallery-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1.08);
+            transition: opacity 0.75s ease, transform 1.4s ease;
+            filter: saturate(1.15) contrast(1.05);
+        }
+
+        .gallery-image.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 16px;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.82rem;
+            line-height: 1.5;
         }
 
         .about-graphic::before,
@@ -911,6 +949,33 @@ https://templatemo.com/tm-596-electric-xtra
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(43, 108, 255, 0.5);
+        }
+
+        .form-status {
+            min-height: 24px;
+            margin-top: 14px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #8cc1ff;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .form-status.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-status.success {
+            color: #7dffce;
+            text-shadow: 0 0 14px rgba(125, 255, 206, 0.4);
+        }
+
+        .form-status.error {
+            color: #ff9d9d;
+            text-shadow: 0 0 14px rgba(255, 157, 157, 0.35);
         }
 
         .contact-info {
@@ -1146,24 +1211,54 @@ https://templatemo.com/tm-596-electric-xtra
                 left: -100%;
                 width: 100%;
                 height: calc(100vh - 70px);
-                background: rgba(10, 10, 10, 0.95);
+                background: rgba(10, 10, 10, 0.98);
                 flex-direction: column;
                 align-items: center;
-                justify-content: start;
-                padding-top: 50px;
+                justify-content: flex-start;
+                padding: 42px 20px 32px;
+                gap: 12px;
                 transition: left 0.3s ease;
+                overflow-y: auto;
+                backdrop-filter: blur(18px);
+                border-top: 1px solid rgba(43, 108, 255, 0.14);
             }
 
             .nav-links.active {
                 left: 0;
             }
 
+            .nav-links a {
+                width: min(100%, 320px);
+                text-align: center;
+                font-size: 15px;
+                opacity: 1;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+
             .menu-toggle {
                 display: flex;
             }
 
+            .hero {
+                min-height: 100svh;
+                padding: 84px 16px 28px;
+                justify-content: flex-start;
+                gap: 18px;
+            }
+
+            .hero-video {
+                object-position: center center;
+                transform: scale(1.08);
+            }
+
             .hero-content {
-                padding: 0 20px;
+                padding: 0;
+                margin-top: clamp(10px, 4vh, 36px);
+                width: min(100%, 520px);
+                flex: 0 0 auto;
+                text-align: center;
+                align-items: center;
             }
 
             .logo-icon {
@@ -1179,25 +1274,56 @@ https://templatemo.com/tm-596-electric-xtra
             }
 
             .glitch-text {
-                font-size: clamp(1.2rem, 4.9vw, 2.4rem);
+                font-size: clamp(2rem, 9.5vw, 3rem);
+                line-height: 0.95;
             }
 
             .text-rotator {
-                min-height: 150px;
+                min-height: 190px;
+                margin-bottom: 8px;
+                padding: 0 8px;
+            }
+
+            .text-set {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
             }
 
             .subtitle {
-                font-size: 1.2rem;
+                font-size: 0.95rem;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                text-align: center;
+                max-width: 20ch;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .cta-container {
+                position: static;
+                transform: none;
+                left: auto;
+                bottom: auto;
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
+                width: min(100%, 360px);
+                margin-top: 8px;
+                gap: 12px;
             }
 
             .cta-button {
                 width: 100%;
-                max-width: 300px;
+                max-width: none;
+                padding: 15px 22px;
+                border-radius: 14px;
+                box-shadow: 0 14px 30px rgba(43, 108, 255, 0.22);
+            }
+
+            .cta-primary {
+                animation: pulse 2.4s infinite;
             }
 
             .features-container {
@@ -1218,11 +1344,29 @@ https://templatemo.com/tm-596-electric-xtra
             .about-content,
             .contact-container {
                 grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-text p {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 62ch;
+            }
+
+            .about-text h2,
+            .contact .section-title,
+            .contact-info h3 {
+                text-align: center;
             }
 
             .about-graphic {
                 width: 200px;
                 height: 200px;
+            }
+
+            .about-graphic-alt {
+                width: 220px;
+                height: 220px;
             }
 
             .shape-circle,
@@ -1236,6 +1380,10 @@ https://templatemo.com/tm-596-electric-xtra
                 display: none;
             }
 
+            #particles {
+                display: none;
+            }
+
             .map-container {
                 padding: 12px;
                 min-height: 0;
@@ -1244,5 +1392,107 @@ https://templatemo.com/tm-596-electric-xtra
 
             .map-embed {
                 height: clamp(180px, 55vw, 260px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 12px 14px;
+            }
+
+            .logo-link {
+                gap: 10px;
+            }
+
+            .logo-icon {
+                width: 46px;
+                height: 46px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+                line-height: 1.1;
+            }
+
+            .hero {
+                padding: 78px 14px 24px;
+                justify-content: center;
+            }
+
+            .hero-video {
+                object-position: center top;
+                transform: scale(1.16);
+            }
+
+            .hero-content {
+                width: 100%;
+                max-width: 360px;
+                margin-top: 0;
+            }
+
+            .text-rotator {
+                min-height: 165px;
+                margin-bottom: 10px;
+                padding: 0;
+            }
+
+            .glitch-text {
+                font-size: clamp(1.7rem, 10.2vw, 2.35rem);
+                line-height: 0.96;
+                text-align: center;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 0.16em;
+            }
+
+            .cta-container {
+                width: 100%;
+                max-width: 320px;
+                margin-top: 4px;
+            }
+
+            .cta-button {
+                padding: 14px 18px;
+                font-size: 0.92rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .hero {
+                padding: 74px 12px 22px;
+            }
+
+            .hero-video {
+                transform: scale(1.22);
+            }
+
+            .hero-content {
+                max-width: 320px;
+            }
+
+            .text-rotator {
+                min-height: 145px;
+            }
+
+            .glitch-text {
+                font-size: clamp(1.45rem, 11vw, 2rem);
+                letter-spacing: 0.08em;
+            }
+
+            .subtitle {
+                font-size: 0.75rem;
+                letter-spacing: 0.14em;
+            }
+
+            .cta-container {
+                max-width: 300px;
+            }
+
+            .cta-button {
+                padding: 12px 16px;
+                font-size: 0.85rem;
             }
         }
