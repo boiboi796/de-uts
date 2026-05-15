@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Ultimate Steppers — Registration Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple: #673ab7; --purple-light: #ede7f6; --purple-dark: #4527a0;
+    --border: #dadce0; --text: #202124; --text-muted: #5f6368;
+    --bg: #f0ebf8; --card: #ffffff; --error: #d93025;
+    --wa-green: #25d366;
+  }
+  body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); min-height:100vh; padding:32px 16px 60px; color:var(--text); }
+
+  .form-container { max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+
+  /* Header */
+  .header-card { background:var(--card); border-radius:8px; overflow:hidden; position:relative; border:1px solid var(--border); background-clip:padding-box; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .header-card::before { content:''; position:absolute; left:0; right:0; top:0; height:8px; background:var(--purple); border-top-left-radius:8px; border-top-right-radius:8px; }
+  .header-banner { background:linear-gradient(135deg,var(--purple),#9c27b0); padding:26px 24px 18px; position:relative; overflow:visible; border-top-left-radius:0; border-top-right-radius:0; }
+  .header-banner::after { content:'💃'; position:absolute; right:24px; top:50%; transform:translateY(-50%); font-size:48px; opacity:.35; pointer-events:none; }
+  .header-banner h1 { font-size:26px; font-weight:700; color:#fff; line-height:1.2; margin:0; }
+  .header-banner p.subtitle { color:rgba(255,255,255,.85); font-size:13px; margin-top:6px; font-weight:400; }
+  .header-body { padding:16px 24px 20px; border-top:none; }
+  .header-body p { font-size:14px; color:var(--text-muted); line-height:1.6; }
+
+  .required-note { font-size:13px; color:var(--text-muted); padding:0 4px; }
+  .required-note span { color:var(--error); }
+
+  /* Cards */
+  .question-card { background:var(--card); border-radius:8px; padding:22px 20px; border:1px solid var(--border); background-clip:padding-box; box-shadow:0 1px 2px rgba(0,0,0,.04); border-left:4px solid transparent; transition:box-shadow .18s,border-left-color .18s; animation:fadeUp .36s ease both; }
+  .question-card:focus-within { box-shadow:0 6px 18px rgba(103,58,183,.06); border-left-color:var(--purple); }
+  .question-card:nth-child(1){animation-delay:.05s} .question-card:nth-child(2){animation-delay:.1s}
+  .question-card:nth-child(3){animation-delay:.15s} .question-card:nth-child(4){animation-delay:.2s}
+  .question-card:nth-child(5){animation-delay:.25s} .question-card:nth-child(6){animation-delay:.3s}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .question-label { font-size:15px; font-weight:600; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:8px; padding:0; border:none; }
+  .required-star { color:var(--error); margin-left:2px; font-size:14px; }
+
+  /* Inputs */
+  .text-input { width:100%; border:none; border-bottom:1px solid var(--border); padding:8px 0; font-size:14px; font-family:inherit; color:var(--text); background:transparent; outline:none; transition:border-color .2s,padding .1s; }
+  .text-input:focus { border-bottom:2px solid var(--purple); padding-bottom:7px; }
+  .text-input::placeholder { color:#bbb; }
+
+  /* Radio */
+  .radio-group { display:flex; flex-direction:column; gap:6px; }
+  .radio-option { display:flex; align-items:center; gap:14px; padding:10px 12px; border-radius:4px; cursor:pointer; transition:background .15s; user-select:none; }
+  .radio-option:hover { background:var(--purple-light); }
+  .radio-option input[type="radio"] { appearance:none; -webkit-appearance:none; width:18px; height:18px; min-width:18px; border:2px solid #5f6368; border-radius:50%; cursor:pointer; position:relative; transition:border-color .2s; outline:none; }
+  .radio-option input[type="radio"]:checked { border-color:var(--purple); }
+  .radio-option input[type="radio"]:checked::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:10px; height:10px; background:var(--purple); border-radius:50%; }
+  .radio-option label { font-size:14px; color:var(--text); cursor:pointer; width:100%; }
+
+  /* File upload */
+  .file-upload-area { border:2px dashed var(--border); border-radius:8px; padding:28px 20px; text-align:center; cursor:pointer; transition:border-color .2s,background .2s; position:relative; background:#fafafa; }
+  .file-upload-area:hover, .file-upload-area.dragover { border-color:var(--purple); background:var(--purple-light); }
+  .file-upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .upload-icon { font-size:36px; margin-bottom:10px; display:block; pointer-events:none; }
+  .upload-text { font-size:14px; color:var(--text-muted); line-height:1.5; pointer-events:none; }
+  .upload-text strong { color:var(--purple); font-weight:600; }
+
+  /* File preview */
+  .file-preview { margin-top:12px; display:none; align-items:center; gap:12px; padding:10px 14px; background:#f8f9fa; border-radius:6px; border:1px solid var(--border); }
+  .file-preview.visible { display:flex; }
+  .file-preview-thumb { width:48px; height:48px; object-fit:cover; border-radius:4px; border:1px solid #ddd; flex-shrink:0; }
+  .file-pdf-icon { width:48px; height:48px; background:#ffebee; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+  .file-preview-info { font-size:13px; color:var(--text); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; flex:1; }
+  .file-preview-info small { display:block; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* Verify banner */
+  .verify-banner { border-radius:8px; padding:14px 16px; font-size:13.5px; display:none; align-items:flex-start; gap:12px; line-height:1.5; margin-top:12px; }
+  .verify-banner.visible { display:flex; }
+  .verify-banner.checking { background:#fff8e1; border:1px solid #ffe082; color:#6d4c0e; }
+  .verify-banner.approved { background:#e8f5e9; border:1px solid #a5d6a7; color:#1b5e20; }
+  .verify-banner.rejected  { background:#fce4ec; border:1px solid #f48fb1; color:#880e4f; }
+  .verify-banner.duplicate { background:#fff3e0; border:1px solid #ffcc80; color:#e65100; }
+  .verify-icon { font-size:20px; flex-shrink:0; line-height:1.4; }
+  .verify-text strong { display:block; font-weight:700; margin-bottom:3px; font-size:14px; }
+  .verify-spin { width:18px; height:18px; flex-shrink:0; border:2px solid #f9ab00; border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; margin-top:1px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* Hash badge */
+  .hash-badge { margin-top:8px; font-size:11px; color:#555; background:#f0f0f0; border-radius:4px; padding:4px 8px; font-family:monospace; word-break:break-all; display:none; }
+  .hash-badge.visible { display:block; }
+
+  /* WhatsApp button */
+  .wa-btn { display:inline-flex; align-items:center; gap:9px; background:var(--wa-green); color:#fff; border:none; border-radius:6px; padding:12px 26px; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:background .2s; box-shadow:0 2px 6px rgba(37,211,102,.35); }
+  .wa-btn:hover { background:#1da851; }
+
+  /* Errors */
+  .error-msg { font-size:12px; color:var(--error); margin-top:6px; display:none; }
+  .error-msg.visible { display:block; }
+  .question-card.has-error { border-left-color:var(--error) !important; }
+  .question-card.has-error .text-input { border-bottom-color:var(--error); }
+
+  /* Fieldset/legend adjustments so legends align inside cards */
+  fieldset.question-card { padding:18px 20px; margin:0; border:1px solid var(--border); border-radius:8px; background:var(--card); position:relative; }
+  fieldset.question-card legend.question-label,
+  fieldset.question-card legend { display:block; padding:0; background:transparent; position:static; margin:0 0 12px 0; font-weight:600; color:var(--text); font-size:15px; }
+  fieldset.question-card .radio-group { margin-top:6px; }
+
+  /* Submit row */
+  .submit-section { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:12px; }
+  .submit-btn { background:var(--purple); color:#fff; border:none; border-radius:4px; padding:10px 28px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:background .2s,box-shadow .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .submit-btn:hover:not(:disabled) { background:var(--purple-dark); box-shadow:0 2px 6px rgba(103,58,183,.4); }
+  .submit-btn:disabled { opacity:.5; cursor:not-allowed; box-shadow:none; }
+  .submit-hint { font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .submit-hint.hidden { display:none; }
+  .clear-btn { background:none; border:none; color:var(--purple); font-size:14px; cursor:pointer; padding:10px 4px; font-family:inherit; text-decoration:underline; text-underline-offset:2px; }
+
+  .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:6px; }
+
+  /* Success */
+  .success-screen { background:var(--card); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.12); padding:48px 32px; text-align:center; border-top:10px solid var(--purple); animation:fadeUp .4s ease both; }
+  .success-icon { font-size:56px; margin-bottom:16px; }
+  .success-screen h2 { font-size:22px; font-weight:700; color:var(--text); margin-bottom:10px; }
+  .success-screen p { font-size:14px; color:var(--text-muted); line-height:1.6; max-width:400px; margin:0 auto 24px; }
+  .another-btn { background:none; border:1px solid var(--purple); color:var(--purple); border-radius:4px; padding:9px 20px; font-family:inherit; font-size:14px; cursor:pointer; transition:background .15s; }
+  .another-btn:hover { background:var(--purple-light); }
+
+  .form-footer { text-align:center; font-size:12px; color:var(--text-muted); padding:12px 0 0; }
+  .form-footer span { color:var(--purple); font-weight:600; }
+
+  @media(max-width:480px){
+    body{padding:16px 10px 48px}
+    .header-banner h1{font-size:21px}
+    .question-card{padding:18px 16px 16px}
+  }
+</style>
+</head>
+<body>
+
+<main class="form-container" id="formContainer">
+  <header class="header-card">
+    <div class="header-banner">
+      <h1>De Ultimate Steppers</h1>
+      <p class="subtitle">Registration &amp; Payment Verification Form</p>
+    </div>
+    <div class="header-body">
+      <p><strong>Payment Required:</strong> ₦5,000 to <strong>OPAY Account: 6556102929</strong></p>
+      <p><strong>Account Name:</strong> Samuel Oluwatobi Abiodun</p>
+      <p style="margin-top:8px;">Welcome! Fill out this form to complete your registration. Once your submission is received and approved, you'll receive a link to join our WhatsApp group.</p>
+    </div>
+  </header>
+
+  <p class="required-note"><span>*</span> Indicates required question</p>
+
+  <form id="registrationForm" novalidate>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Full Name -->
+      <div class="question-card" id="card-name">
+        <label class="question-label" for="fullName">Full Name <span class="required-star">*</span></label>
+        <input class="text-input" type="text" id="fullName" placeholder="Enter your full name" autocomplete="name">
+        <div class="error-msg" id="err-name">This is a required question.</div>
+      </div>
+
+      <!-- Email -->
+      <div class="question-card" id="card-email">
+        <label class="question-label" for="email">Email Address <span class="required-star">*</span></label>
+        <input class="text-input" type="email" id="email" placeholder="example@email.com" autocomplete="email">
+        <div class="error-msg" id="err-email">Please enter a valid email address.</div>
+      </div>
+
+      <!-- Phone -->
+      <div class="question-card" id="card-phone">
+        <label class="question-label" for="phone">Phone Number <span class="required-star">*</span></label>
+        <input class="text-input" type="tel" id="phone" placeholder="e.g. 08012345678" autocomplete="tel">
+        <div class="error-msg" id="err-phone">Please enter a valid phone number (at least 8 digits).</div>
+      </div>
+
+      <!-- UI Student -->
+      <fieldset class="question-card" id="card-ui">
+        <legend class="question-label" style="padding-top: 42px;">Are you a University of Ibadan student? <span class="required-star">*</span></legend>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="uiStudent" id="ui-yes" value="Yes">
+            <label for="ui-yes">Yes</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="uiStudent" id="ui-no" value="No">
+            <label for="ui-no">No</label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-ui">Please select an option.</div>
+      </fieldset>
+
+      <!-- Dance Level -->
+      <fieldset class="question-card" id="card-level">
+        <legend class="question-label" style="padding-top: 42px;">What is your dance experience level? <span class="required-star">*</span></legend>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="danceLevel" id="level-beginner" value="Beginner">
+            <label for="level-beginner">🌱 Beginner — I'm just getting started</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="danceLevel" id="level-intermediate" value="Intermediate">
+            <label for="level-intermediate">⚡ Intermediate — I have some experience</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="danceLevel" id="level-professional" value="Professional">
+            <label for="level-professional">🏆 Professional — I'm highly experienced</label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-level">Please select your experience level.</div>
+      </fieldset>
+
+      <!-- Payment Receipt -->
+      <div class="question-card" id="card-receipt">
+        <div class="question-label">Upload Payment Receipt <span class="required-star">*</span></div>
+        <div class="file-upload-area" id="uploadArea">
+          <input type="file" id="receiptFile" accept="image/jpeg,image/png,image/webp,application/pdf">
+          <span class="upload-icon" aria-hidden="true">📎</span>
+          <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop<br><small>JPG, PNG or PDF — Max 10 MB</small></div>
+        </div>
+        <div class="file-preview" id="filePreview">
+          <div id="previewThumbWrap"></div>
+          <div class="file-preview-info">
+            <span id="previewName"></span>
+            <small id="previewSize"></small>
+          </div>
+        </div>
+        <div class="verify-banner" id="verifyBanner">
+          <div id="verifyIconSlot" class="verify-icon"></div>
+          <div class="verify-text">
+            <strong id="verifyTitle"></strong>
+            <span id="verifyMsg"></span>
+          </div>
+        </div>
+        <div class="hash-badge" id="hashBadge"></div>
+        <div class="error-msg" id="err-receipt">Please upload your payment receipt.</div>
+      </div>
+
+      <!-- Submit row -->
+      <div class="submit-section">
+        <div>
+          <button type="button" class="submit-btn" id="submitBtn" disabled onclick="submitForm()">Submit</button>
+          <div class="submit-hint" id="submitHint">⚠️ Please upload your payment receipt first</div>
+        </div>
+        <button type="button" class="clear-btn" onclick="clearForm()">Clear form</button>
+      </div>
+    </div>
+  </form>
+  <p class="form-footer">Responses sent to <span>deultimatesteppers@gmail.com</span></p>
+</main>
+
+<!-- Success screen -->
+<div class="form-container" id="successContainer" style="display:none;">
+  <div class="success-screen">
+    <div class="success-icon" aria-hidden="true">🎊</div>
+    <h2>Registration Complete!</h2>
+    <p>Your details have been sent to our team at <strong>deultimatesteppers@gmail.com</strong>. Now click below to join the WhatsApp group!</p>
+    <button class="wa-btn" id="waBtn" style="margin-bottom:20px;">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;fill:#fff;flex-shrink:0" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Join WhatsApp Group
+    </button>
+    <br>
+    <button type="button" class="another-btn" onclick="resetForm()">Submit another response</button>
+  </div>
+  <p class="form-footer">Responses sent to <span>deultimatesteppers@gmail.com</span></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.mjs';
+
+window.pdfjsLib = pdfjsLib;
+</script>
+
+<script>
+// ─── WhatsApp URL (split to prevent trivial scraping) ────────────────────────
+const WA_PARTS = [
+  'aHR0cHM6Ly9jaGF0Lndow',
+  'YXRzYXBwLmNvbS9DS3ZLM',
+  'UJYTlc3dkdlOEpwZXRXand3'
+];
+
+function _decodeWA() {
+  // Pad each part to valid base64 length before decoding
+  return WA_PARTS.map(p => {
+    const pad = p.length % 4 === 0 ? p : p + '='.repeat(4 - (p.length % 4));
+    return atob(pad);
+  }).join('');
+}
+
+function _openWA() {
+  const url = _decodeWA();
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// ─── Storage: hashed transaction IDs ────────────────────────────────────────
+// Stored as a JSON array in localStorage key "dus_tx_hashes"
+// Each entry: { hash: string, submittedAt: ISO string }
+const STORAGE_KEY = 'dus_tx_hashes';
+
+function loadHashStore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveHashStore(store) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch {}
+}
+
+function isHashKnown(hash) {
+  return loadHashStore().some(e => e.hash === hash);
+}
+
+function recordHash(hash) {
+  const store = loadHashStore();
+  store.push({ hash, submittedAt: new Date().toISOString() });
+  saveHashStore(store);
+}
+
+// ─── SHA-256 via Web Crypto API ───────────────────────────────────────────────
+async function sha256(data) {
+  // data: ArrayBuffer or string
+  let buf;
+  if (typeof data === 'string') {
+    buf = new TextEncoder().encode(data);
+  } else {
+    buf = data;
+  }
+  const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ─── Receipt fingerprint ──────────────────────────────────────────────────────
+// Reads the file as ArrayBuffer and hashes the actual bytes.
+// This is stronger than hashing metadata: identical file content = same hash.
+async function fingerprintFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const hash = await sha256(e.target.result);
+        resolve(hash);
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let receiptHash = '';       // SHA-256 hex of current file
+let receiptMeta = '';       // human-readable metadata for submission
+let verificationPassed = false;
+
+// ─── DOM ready ────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const ua = document.getElementById('uploadArea');
+  const fileInput = document.getElementById('receiptFile');
+
+  // Drag & drop — use a DataTransfer clone for cross-browser safety
+  ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
+  ua.addEventListener('dragleave', e => { if (!ua.contains(e.relatedTarget)) ua.classList.remove('dragover'); });
+  ua.addEventListener('drop', e => {
+    e.preventDefault();
+    ua.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      // Create a new DataTransfer and assign to input (works on all modern browsers)
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(files[0]);
+        fileInput.files = dt.files;
+      } catch {}
+      handleFileSelect(files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) handleFileSelect(fileInput.files[0]);
+  });
+
+  // Live validation clear
+  document.getElementById('fullName').addEventListener('input', () => clearError('name'));
+  document.getElementById('email').addEventListener('input', () => clearError('email'));
+  document.getElementById('phone').addEventListener('input', () => clearError('phone'));
+  document.querySelectorAll('input[name="uiStudent"]').forEach(r => r.addEventListener('change', () => clearError('ui')));
+  document.querySelectorAll('input[name="danceLevel"]').forEach(r => r.addEventListener('change', () => clearError('level')));
+
+  // Wire WA button
+  document.getElementById('waBtn').addEventListener('click', _openWA);
+});
+
+// ─── File handling ────────────────────────────────────────────────────────────
+function handleFileSelect(file) {
+  clearError('receipt');
+  setSubmitEnabled(false);
+  receiptHash = '';
+  receiptMeta = '';
+  verificationPassed = false;
+
+  // Show preview
+  document.getElementById('previewName').textContent = file.name;
+  document.getElementById('previewSize').textContent = formatBytes(file.size);
+  const tw = document.getElementById('previewThumbWrap');
+  tw.innerHTML = '';
+
+  if (file.type.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.className = 'file-preview-thumb';
+    const objUrl = URL.createObjectURL(file);
+    img.src = objUrl;
+    img.onload = () => URL.revokeObjectURL(objUrl); // free memory
+    tw.appendChild(img);
+  } else {
+    const ic = document.createElement('div');
+    ic.className = 'file-pdf-icon';
+    ic.textContent = '📄';
+    tw.appendChild(ic);
+  }
+  document.getElementById('filePreview').classList.add('visible');
+  document.getElementById('hashBadge').classList.remove('visible');
+
+  verifyReceipt(file);
+}
+
+async function verifyReceipt(file) {
+
+  showVerify('checking');
+
+  const ALLOWED = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'application/pdf'
+  ];
+
+  const MAX_SIZE = 10 * 1024 * 1024;
+
+  if (!ALLOWED.includes(file.type)) {
+    return rejectVerify(
+      'Invalid file type. Upload JPG, PNG, WEBP or PDF.'
+    );
+  }
+
+  if (file.size > MAX_SIZE) {
+    return rejectVerify(
+      'File exceeds 10MB.'
+    );
+  }
+
+  let hash;
+
+  try {
+    hash = await fingerprintFile(file);
+  }
+  catch {
+    return rejectVerify(
+      'Could not process file.'
+    );
+  }
+
+  // DUPLICATE CHECK
+  if (isHashKnown(hash)) {
+
+    showVerify('duplicate');
+
+    document.getElementById('verifyTitle').textContent =
+      '⚠️ Duplicate Receipt';
+
+    document.getElementById('verifyMsg').textContent =
+      'This receipt has already been used.';
+
+    setSubmitEnabled(false);
+
+    return;
+  }
+
+  let extractedText = '';
+
+  try {
+
+    // IMAGE OCR
+    if (file.type.startsWith('image/')) {
+
+      const result = await Tesseract.recognize(
+        file,
+        'eng',
+        {
+          logger: m => {
+
+            if (m.status === 'recognizing text') {
+
+              const percent =
+                Math.floor(m.progress * 100);
+
+              document.getElementById(
+                'verifyMsg'
+              ).textContent =
+                `Scanning receipt... ${percent}%`;
+            }
+          }
+        }
+      );
+
+      extractedText = result.data.text;
+    }
+
+    // PDF EXTRACTION
+    else if (file.type === 'application/pdf') {
+
+      const arrayBuffer =
+        await file.arrayBuffer();
+
+      const pdf =
+        await window.pdfjsLib.getDocument({
+          data: arrayBuffer
+        }).promise;
+
+      for (
+        let pageNum = 1;
+        pageNum <= pdf.numPages;
+        pageNum++
+      ) {
+
+        const page =
+          await pdf.getPage(pageNum);
+
+        const textContent =
+          await page.getTextContent();
+
+        const pageText =
+          textContent.items
+            .map(item => item.str)
+            .join(' ');
+
+        extractedText += ' ' + pageText;
+      }
+    }
+
+  }
+  catch (err) {
+
+    console.error(err);
+
+    return rejectVerify(
+      'Failed to scan receipt.'
+    );
+  }
+
+  console.log(extractedText);
+
+  const text =
+    extractedText.toLowerCase();
+
+  const cleanText =
+    text.replace(/\s+/g, ' ');
+
+  // VALIDATION
+  const amountValid =
+
+       cleanText.includes('5000')
+    || cleanText.includes('5,000')
+    || cleanText.includes('₦5000')
+    || cleanText.includes('₦5,000');
+
+  const accountValid =
+    cleanText.includes('6556102929');
+
+  const nameValid =
+
+       cleanText.includes('samuel')
+    || cleanText.includes('oluwatobi')
+    || cleanText.includes('abiodun');
+
+  const successValid =
+
+       cleanText.includes('successful')
+    || cleanText.includes('success')
+    || cleanText.includes('completed');
+
+  let fraudScore = 0;
+
+  if (!amountValid) fraudScore++;
+  if (!accountValid) fraudScore++;
+  if (!nameValid) fraudScore++;
+  if (!successValid) fraudScore++;
+
+  if (cleanText.length < 30) {
+    fraudScore++;
+  }
+
+  // FAIL
+  if (fraudScore >= 2) {
+
+    return rejectVerify(
+      'Receipt verification failed. Upload a valid payment receipt.'
+    );
+  }
+
+  // PASS
+  receiptHash = hash;
+
+  receiptMeta = `
+VERIFIED RECEIPT
+
+File Name:
+${file.name}
+
+File Size:
+${formatBytes(file.size)}
+
+SHA-256:
+${hash}
+
+Extracted Text:
+${cleanText}
+`;
+
+  showVerify('approved');
+
+  document.getElementById(
+    'verifyTitle'
+  ).textContent =
+    '✅ Receipt Verified';
+
+  document.getElementById(
+    'verifyMsg'
+  ).textContent =
+    'Payment receipt verified successfully.';
+
+  document.getElementById(
+    'hashBadge'
+  ).textContent =
+    'Receipt ID: ' +
+    hash.slice(0, 32) +
+    '...';
+
+  document.getElementById(
+    'hashBadge'
+  ).classList.add('visible');
+
+  verificationPassed = true;
+
+  setSubmitEnabled(true);
+}
+
+function rejectVerify(msg) {
+  showVerify('rejected');
+  document.getElementById('verifyTitle').textContent = '❌ Receipt Not Accepted';
+  document.getElementById('verifyMsg').textContent = msg;
+  setSubmitEnabled(false);
+}
+
+function showVerify(type) {
+  const b = document.getElementById('verifyBanner');
+  const is = document.getElementById('verifyIconSlot');
+  b.className = 'verify-banner visible ' + type;
+
+  if (type === 'checking') {
+    is.innerHTML = '';
+    const spin = document.createElement('div');
+    spin.className = 'verify-spin';
+    is.appendChild(spin);
+    document.getElementById('verifyTitle').textContent = 'Verifying receipt…';
+    document.getElementById('verifyMsg').textContent = 'Checking file integrity and duplicate status.';
+  } else {
+    is.innerHTML = '';
+  }
+}
+
+function hideVerify() {
+  document.getElementById('verifyBanner').className = 'verify-banner';
+  document.getElementById('hashBadge').classList.remove('visible');
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function setSubmitEnabled(enabled) {
+  const btn  = document.getElementById('submitBtn');
+  const hint = document.getElementById('submitHint');
+  btn.disabled = !enabled;
+  hint.classList.toggle('hidden', enabled);
+}
+
+// ─── Validation ───────────────────────────────────────────────────────────────
+function clearError(field) {
+  document.getElementById('card-' + field)?.classList.remove('has-error');
+  document.getElementById('err-'  + field)?.classList.remove('visible');
+}
+
+function setError(field) {
+  document.getElementById('card-' + field)?.classList.add('has-error');
+  document.getElementById('err-'  + field)?.classList.add('visible');
+}
+
+function validateForm() {
+  let valid = true;
+  const name  = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const ui    = document.querySelector('input[name="uiStudent"]:checked');
+  const level = document.querySelector('input[name="danceLevel"]:checked');
+
+  if (!name)                          { setError('name');    valid = false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                                      { setError('email');   valid = false; }
+  if (!phone || phone.replace(/\D/g,'').length < 8)
+                                      { setError('phone');   valid = false; }
+  if (!ui)                            { setError('ui');      valid = false; }
+  if (!level)                         { setError('level');   valid = false; }
+  if (!verificationPassed || !receiptHash)
+                                      { setError('receipt'); valid = false; }
+  return valid;
+}
+
+// ─── Submission ───────────────────────────────────────────────────────────────
+async function submitForm() {
+  if (!validateForm()) {
+    document.querySelector('.has-error')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Sending…';
+
+  const payload = {
+    'Full Name':                    document.getElementById('fullName').value.trim(),
+    'Email':                        document.getElementById('email').value.trim(),
+    'Phone Number':                 document.getElementById('phone').value.trim(),
+    'University of Ibadan Student': document.querySelector('input[name="uiStudent"]:checked').value,
+    'Dance Experience Level':       document.querySelector('input[name="danceLevel"]:checked').value,
+    'Receipt Metadata':             receiptMeta,
+    '_subject':                     'New Registration — De Ultimate Steppers'
+  };
+
+  try {
+    const res = await fetch('https://formspree.io/f/mreqryno', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      // Persist the hash so this receipt can't be reused on this device
+      recordHash(receiptHash);
+
+      document.getElementById('formContainer').style.display = 'none';
+      const sc = document.getElementById('successContainer');
+      sc.style.display = 'flex';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      const msg = data?.errors?.map(e => e.message).join(', ') || 'Submission failed. Please try again.';
+      alert('⚠️ ' + msg);
+      btn.disabled = false;
+      btn.innerHTML = 'Submit';
+    }
+  } catch {
+    alert('⚠️ Network error. Please check your connection and try again.');
+    btn.disabled = false;
+    btn.innerHTML = 'Submit';
+  }
+}
+
+// ─── Reset / clear ────────────────────────────────────────────────────────────
+function clearForm() {
+  document.getElementById('registrationForm').reset();
+  document.getElementById('filePreview').classList.remove('visible');
+  hideVerify();
+  setSubmitEnabled(false);
+  receiptHash = '';
+  receiptMeta = '';
+  verificationPassed = false;
+  ['name','email','phone','ui','level','receipt'].forEach(clearError);
+}
+
+function resetForm() {
+  clearForm();
+  const fc = document.getElementById('formContainer');
+  fc.style.display = 'flex';
+  document.getElementById('successContainer').style.display = 'none';
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+</body>
+</html>
