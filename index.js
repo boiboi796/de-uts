@@ -11,6 +11,7 @@ https://templatemo.com/tm-596-electric-xtra
 // Create floating particles
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const particleCount = isMobile ? 10 : 18;
 
@@ -99,20 +100,31 @@ https://templatemo.com/tm-596-electric-xtra
         // Feature tabs functionality
         const tabs = document.querySelectorAll('.tab-item');
         const panels = document.querySelectorAll('.content-panel');
+        let activeTabIndex = 0;
 
-        tabs.forEach(tab => {
+        function activateFeatureTab(tab, index) {
+            const tabId = tab.getAttribute('data-tab');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+
+            tab.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            activeTabIndex = index;
+        }
+
+        tabs.forEach((tab, index) => {
             tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Remove active class from all tabs and panels
-                tabs.forEach(t => t.classList.remove('active'));
-                panels.forEach(p => p.classList.remove('active'));
-                
-                // Add active class to clicked tab and corresponding panel
-                tab.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
+                activateFeatureTab(tab, index);
             });
         });
+
+        if (tabs.length) {
+            setInterval(() => {
+                const nextIndex = (activeTabIndex + 1) % tabs.length;
+                activateFeatureTab(tabs[nextIndex], nextIndex);
+            }, 4500);
+        }
 
         // Handle Formspree submit without redirecting.
         const contactForm = document.getElementById('contactForm');
@@ -231,8 +243,7 @@ https://templatemo.com/tm-596-electric-xtra
             }, 300);
         }
 
-        // Initialize particles
-        createParticles();
+        // Decorative particles were removed for a cleaner presentation.
 
         // Text rotation with character animation
         const textSets = document.querySelectorAll('.text-set');
@@ -307,15 +318,3 @@ https://templatemo.com/tm-596-electric-xtra
             setInterval(rotateText, 5000); // Change every 5 seconds
         }, 4000);
 
-        // Add random glitch effect
-        setInterval(() => {
-            const glitchTexts = document.querySelectorAll('.glitch-text');
-            glitchTexts.forEach(text => {
-                if (Math.random() > 0.95) {
-                    text.style.animation = 'none';
-                    setTimeout(() => {
-                        text.style.animation = '';
-                    }, 200);
-                }
-            });
-        }, 3000);
