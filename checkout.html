@@ -152,8 +152,56 @@
     font-size: 10.5px;
     margin-top: 18px;
   }
+  #paymentExitPrompt {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    padding: 24px 16px;
+  }
+  .payment-exit-card {
+    width: min(100%, 360px);
+    background: #120f06;
+    border: 1px solid #3a2f0d;
+    border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+    padding: 20px;
+    text-align: center;
+  }
+  .payment-exit-card h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #f5e28c;
+  }
+  .payment-exit-card p {
+    margin: 0 0 18px;
+    color: #c9c0a1;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .payment-exit-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .payment-exit-actions button {
+    padding: 13px 10px;
+    font-size: 13px;
+  }
+  .payment-exit-actions .cancel-button {
+    background: transparent;
+    border: 1px solid #3a2f0d;
+    color: #f5e28c;
+  }
   @media (max-width: 380px) {
     .ticket-card { padding: 22px 18px; }
+    .payment-exit-actions {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
@@ -179,6 +227,17 @@
   <p class="footer-note">Secured by Paystack · De Ultimate Steppers</p>
 </div>
 
+<div id="paymentExitPrompt" role="dialog" aria-modal="true" aria-labelledby="paymentExitTitle" aria-describedby="paymentExitCopy">
+  <div class="payment-exit-card">
+    <h2 id="paymentExitTitle">Leave payment?</h2>
+    <p id="paymentExitCopy">If you have already made the payment, choose <b>I have paid</b>. Otherwise choose <b>Cancel payment</b> to stay in the checkout flow.</p>
+    <div class="payment-exit-actions">
+      <button type="button" id="paymentMadeButton">I have paid</button>
+      <button type="button" id="cancelPaymentButton" class="cancel-button">Cancel payment</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const EVENT = {
     name: "DANCE FEVER 4.0",
@@ -195,6 +254,11 @@
   const raw = sessionStorage.getItem('dus_ticket');
   const payButton = document.getElementById('payButton');
   const soldOutMessage = document.getElementById('soldOutMessage');
+  const paymentExitPrompt = document.getElementById('paymentExitPrompt');
+  const paymentMadeButton = document.getElementById('paymentMadeButton');
+  const cancelPaymentButton = document.getElementById('cancelPaymentButton');
+  let activePaystackHandler = null;
+  let closingPromptActive = false;
 
   // Checks capacity before letting anyone pay. If the check itself fails
   // (network hiccup, function not deployed yet), we fail open — don't block
@@ -319,10 +383,12 @@
     payButton.addEventListener('click', function () {
       payButton.disabled = true;
       payButton.textContent = 'Processing...';
+      paymentExitPrompt.style.display = 'none';
+      document.body.style.overflow = '';
 
       const ticketTag = generateTicketTag();
 
-      const handler = PaystackPop.setup({
+      activePaystackHandler = PaystackPop.setup({
         key: 'pk_live_f745f535b5e67eaa4d1b9f4b826a123caeb0bfc4', // TODO: swap for pk_live_ before the event
         email: ticket.email,
         amount: TICKET_PRICE_NAIRA * 100, // kobo
@@ -351,12 +417,43 @@
           });
         },
         onClose: function () {
+          if (closingPromptActive) {
+            return;
+          }
+
           payButton.disabled = false;
           payButton.textContent = 'Pay ₦1,000';
+          document.body.style.overflow = 'hidden';
+          paymentExitPrompt.style.display = 'flex';
         }
       });
 
-      handler.openIframe();
+      activePaystackHandler.openIframe();
+    });
+
+    paymentMadeButton.addEventListener('click', function () {
+      closingPromptActive = true;
+      paymentExitPrompt.style.display = 'none';
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        closingPromptActive = false;
+        payButton.disabled = true;
+        payButton.textContent = 'Processing...';
+        if (activePaystackHandler) {
+          activePaystackHandler.openIframe();
+        }
+      }, 0);
+    });
+
+    cancelPaymentButton.addEventListener('click', function () {
+      closingPromptActive = true;
+      paymentExitPrompt.style.display = 'none';
+      document.body.style.overflow = '';
+      payButton.disabled = false;
+      payButton.textContent = 'Pay ₦1,000';
+      setTimeout(() => {
+        closingPromptActive = false;
+      }, 0);
     });
   }
 </script>
