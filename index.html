@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De Ultimate Steppers | Move. Feel. Become.</title>
+    <meta name="description" content="De Ultimate Steppers — the University of Ibadan's dance collective. Hip-Hop, Afro, Contemporary and Breakdance. Move. Feel. Become.">
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" sizes="any">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -22,8 +25,9 @@
                 <li><a href="#features" class="nav-link">Styles</a></li>
                 <li><a href="#contact" class="nav-link">Classes</a></li>
                 <li><a href="#contact" class="nav-link">Updates</a></li>
+                <li><a href="register.html" class="nav-cta" target="_blank">Join the Train</a></li>
             </ul>
-            <div class="menu-toggle" id="menuToggle">
+            <div class="menu-toggle" id="menuToggle" role="button" aria-label="Toggle menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -33,30 +37,34 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <!-- Video Background -->
         <video class="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
             <source src="images/deutsbody.mp4" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
-
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
-            <div class="text-rotator">
+            <span class="eyebrow">University of Ibadan &middot; Dance Collective</span>
+            <div class="text-rotator" id="textRotator">
                 <div class="text-set active">
-                    <h1 class="glitch-text" data-text="MOVE. FEEL. BECOME.">MOVE. FEEL. BECOME.</h1>
+                    <h1>Move.<br>Feel.<br>Become.</h1>
                     <p class="subtitle">De Ultimate Steppers</p>
                 </div>
                 <div class="text-set">
-                    <h1 class="glitch-text" data-text="OUR STORY">OUR STORY</h1>
+                    <h1>Our<br>Story<br>Started Here.</h1>
                     <p class="subtitle">University of Ibadan</p>
                 </div>
                 <div class="text-set">
-                    <h1 class="glitch-text" data-text="JOIN THE TRAIN">JOIN THE TRAIN</h1>
-                    <p class="subtitle">Watch Performances</p>
+                    <h1>Join<br>The<br>Train.</h1>
+                    <p class="subtitle">Watch our performances</p>
                 </div>
             </div>
+            <div class="rotator-dots" id="rotatorDots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
         </div>
+
         <div class="cta-container">
             <a href="register.html" class="cta-button cta-primary" target="_blank">Join the Train</a>
             <a href="https://www.youtube.com/@deultimatesteppers" class="cta-button cta-secondary" target="_blank">Watch Performances</a>
@@ -65,29 +73,32 @@
 
     <!-- Features Section with Tabs -->
     <section class="features" id="features">
-        <h2 class="section-title">Find Your Rhythm</h2>
+        <div class="section-head">
+            <span class="eyebrow">What We Do</span>
+            <h2 class="section-title">Find Your Rhythm</h2>
+        </div>
         <div class="features-container">
-            <div class="feature-tabs">
-                <div class="tab-item active" data-tab="performance">
+            <div class="feature-tabs" role="tablist">
+                <button class="tab-item active" data-tab="performance" role="tab" aria-selected="true">
                     <span class="tab-icon">01</span>
                     <span>Our Story</span>
-                </div>
-                <div class="tab-item" data-tab="security">
+                </button>
+                <button class="tab-item" data-tab="security" role="tab" aria-selected="false">
                     <span class="tab-icon">02</span>
                     <span>Styles</span>
-                </div>
-                <div class="tab-item" data-tab="network">
+                </button>
+                <button class="tab-item" data-tab="network" role="tab" aria-selected="false">
                     <span class="tab-icon">03</span>
                     <span>Classes</span>
-                </div>
-                <div class="tab-item" data-tab="analytics">
+                </button>
+                <button class="tab-item" data-tab="analytics" role="tab" aria-selected="false">
                     <span class="tab-icon">04</span>
                     <span>Updates</span>
-                </div>
-                <div class="tab-item" data-tab="integration">
+                </button>
+                <button class="tab-item" data-tab="integration" role="tab" aria-selected="false">
                     <span class="tab-icon">05</span>
                     <span>Join</span>
-                </div>
+                </button>
             </div>
             <div class="feature-content">
                 <div class="content-panel active" id="performance">
@@ -146,32 +157,28 @@
 
     <!-- About Section -->
     <section class="about" id="about">
-        <h2 class="section-title">Our Story</h2>
         <div class="about-content">
             <div class="about-text">
+                <span class="eyebrow">Our Story</span>
                 <h2>Born in Motion</h2>
                 <p>Within the historic walls of the University of Ibadan, a different kind of legacy began to rise. De Ultimate Steppers was born from a shared belief among passionate dancers who understood that dance is more than rhythm and routine; it is identity in motion.</p>
                 <p>What started as simple training sessions on campus, driven by raw passion, late rehearsals, and unbreakable dedication, slowly evolved into a powerful collective known for energy, discipline, and unmistakable presence.</p>
-                <p>We do not chase trends; we refine craft. We do not imitate; we innovate.</p>
+                <p class="pull-quote">We do not chase trends; we refine craft. We do not imitate; we innovate.</p>
             </div>
             <div class="about-visual">
-                <div class="about-graphic">
-                    <div class="about-gallery" id="aboutGallery" aria-label="Dance moments gallery"></div>
-                </div>
+                <div class="about-gallery" id="aboutGallery" aria-label="Dance moments gallery"></div>
             </div>
         </div>
-        
-        <!-- Second row with reversed layout -->
-        <div class="about-content" style="margin-top: 80px;">
+
+        <div class="about-content reverse">
             <div class="about-visual">
-                <div class="about-graphic-alt">
-                    <div class="hexagon"></div>
-                    <div class="hexagon"></div>
-                    <div class="hexagon"></div>
+                <div class="beat-bars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 </div>
             </div>
             <div class="about-text">
-                <h2>Find Your Rhythm</h2>
+                <span class="eyebrow">Find Your Rhythm</span>
+                <h2>Four Styles, One Crew</h2>
                 <p>Hip-Hop, Afro, Contemporary, and Breakdance shape the way we move, perform, and connect with every audience.</p>
                 <p>More than a dance crew, we are a family built on respect, consistency, and shared vision.</p>
                 <p>Our mission is clear: to inspire, to represent, and to elevate dance culture within and beyond the University of Ibadan.</p>
@@ -181,7 +188,10 @@
 
     <!-- Contact Section -->
     <section class="contact" id="contact">
-        <h2 class="section-title">Send us a Message</h2>
+        <div class="section-head">
+            <span class="eyebrow">Get In Touch</span>
+            <h2 class="section-title">Send Us a Message</h2>
+        </div>
         <div class="contact-container">
             <div class="contact-form">
                 <form id="contactForm" action="https://formspree.io/f/mreqryno" method="POST">
@@ -194,65 +204,53 @@
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required>
-                    </div>
-                    <div class="form-group">
                         <label for="message">Message</label>
                         <textarea id="message" name="message" required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">Send</button>
+                    <button type="submit" class="submit-btn">Send Message</button>
                 </form>
                 <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
             </div>
             <div class="contact-info">
                 <h3>Join the Train</h3>
-                <div class="info-item">
+                <a class="info-item" href="https://www.youtube.com/@deultimatesteppers" target="_blank">
                     <div class="info-icon">YT</div>
                     <div class="info-details">
-                        <a href="https://www.youtube.com/@deultimatesteppers" style="text-decoration: none;">
                         <h4>Watch</h4>
-                        <p style="color: white;">Performances on YouTube</p>
-                        </a>
+                        <p>Performances on YouTube</p>
                     </div>
-                </div>
-                <div class="info-item">
+                </a>
+                <a class="info-item" href="register.html" target="_blank">
                     <div class="info-icon">IN</div>
                     <div class="info-details">
-                        <a href="register.html" style="text-decoration: none;">
                         <h4>Join</h4>
-                        <p style="color: white;">Google Form registration</p>
-                        </a>
+                        <p>Google Form registration</p>
                     </div>
-                </div>
-                <div class="info-item">
+                </a>
+                <div class="info-item info-item-static">
                     <div class="info-icon">UI</div>
                     <div class="info-details">
                         <h4>Location</h4>
-                        <p style="color: white;">University of Ibadan</p>
+                        <p>University of Ibadan</p>
                     </div>
                 </div>
                 <div class="map-container">
-                    <div class="map-placeholder">
-                        <iframe class="map-embed" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31649.466354838023!2d3.8633881108398382!3d7.444962700000008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1039f32b9131c543%3A0x537e65c1874bdfcf!2sThe%20Love%20Garden!5e0!3m2!1sen!2sng!4v1776358594907!5m2!1sen!2sng" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        <p>Move. Feel. Become.</p>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">De Ultimate Steppers</p>
-                    </div>
-                    <div class="map-overlay"></div>
+                    <iframe class="map-embed" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31649.466354838023!2d3.8633881108398382!3d7.444962700000008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1039f32b9131c543%3A0x537e65c1874bdfcf!2sThe%20Love%20Garden!5e0!3m2!1sen!2sng!4v1776358594907!5m2!1sen!2sng" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>  
+    <footer>
         <div class="footer-content">
+            <a href="#home" class="footer-logo">De Ultimate Steppers</a>
             <div class="footer-links">
                 <a href="#about">About</a>
-                <a href="#styles">Styles</a>
+                <a href="#features">Styles</a>
                 <a href="#contact">Join</a>
             </div>
-            <p class="copyright">© 2026 De Ultimate Steppers. All rights reserved.</p>
+            <p class="copyright">&copy; 2026 De Ultimate Steppers. All rights reserved.</p>
         </div>
     </footer>
 <script src="index.js"></script>
