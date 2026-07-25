@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dance Fever 4.0 — Get Your Ticket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    isolation: isolate;
+    background: radial-gradient(circle at 50% 0%, #1a1206 0%, #000 60%);
+    color: #fff;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('poster.jpg') center center / cover no-repeat;
+    opacity: 0.08;
+    filter: saturate(0.85) brightness(0.8);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .ticket-card {
+    position: relative;
+    z-index: 1;
+    background: #0e0e0e;
+    border: 1px solid #3a2f0d;
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.15), 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #d4af37;
+    border: 1px solid #3a2f0d;
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(24px, 6vw, 30px);
+    font-weight: 800;
+    margin: 0 0 6px;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #d4af37, #f5e28c 50%, #d4af37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  p.tagline { color: #999; font-size: 13px; margin: 0 0 16px; }
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #161207;
+    border: 1px solid #2a2109;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 22px;
+  }
+  .event-details .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: #e8d9a8;
+  }
+  .event-details .row .icon { font-size: 14px; }
+  label {
+    display: block;
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    margin-bottom: 16px;
+    background: #000;
+    border: 1px solid #3a2f0d;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  input:focus {
+    outline: none;
+    border-color: #d4af37;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(212,175,55,0.12), rgba(245,226,140,0.06));
+    border: 1px solid #3a2f0d;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+  .price-row span:first-child { font-size: 13px; color: #ccc; }
+  .price-row span:last-child { font-size: 18px; font-weight: 700; color: #f5e28c; }
+  button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #d4af37, #f5e28c);
+    color: #111;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  button:active { transform: scale(0.98); }
+  button:hover { opacity: 0.92; }
+  .footer-note {
+    text-align: center;
+    color: #555;
+    font-size: 10.5px;
+    margin-top: 16px;
+  }
+  @media (max-width: 380px) {
+    .ticket-card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticket-card">
+  <span class="badge">DE ULTIMATE STEPPERS PRESENTS</span>
+  <h1>DANCE FEVER 4.0</h1>
+  <p class="tagline">Move. Feel. Become.</p>
+
+  <div class="event-details">
+    <div class="row"><span class="icon">📅</span><span>10th Oct, 2026 &middot; 4PM Prompt</span></div>
+    <div class="row"><span class="icon">📍</span><span>Wole Soyinka Hall, Theater Arts, UI</span></div>
+  </div>
+
+  <form id="ticketForm">
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="e.g. Dance Engine" required>
+
+    <label for="email">Email (must be a valid email address)</label>
+    <input type="email" id="email" placeholder="e.g. deultimatesteppers@email.com" required>
+
+    <div class="price-row">
+      <span>Ticket Price</span>
+      <span>₦1,000</span>
+    </div>
+
+    <button type="submit">Continue to Payment</button>
+  </form>
+
+  <p class="footer-note">Secured by Paystack · De Ultimate Steppers</p>
+</div>
+
+<script>
+  document.getElementById('ticketForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const ticketData = {
+      fullName: document.getElementById('fullName').value,
+      email: document.getElementById('email').value
+    };
+
+    sessionStorage.setItem('dus_ticket', JSON.stringify(ticketData));
+    window.location.href = 'checkout.html';
+  });
+</script>
+
+</body>
+</html>

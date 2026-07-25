@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dance Fever 4.0 — Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    isolation: isolate;
+    background: radial-gradient(circle at 50% 0%, #1a1206 0%, #000 60%);
+    color: #fff;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('poster.jpg') center center / cover no-repeat;
+    opacity: 0.08;
+    filter: saturate(0.85) brightness(0.8);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .ticket-card {
+    position: relative;
+    z-index: 1;
+    background: #0e0e0e;
+    border: 1px solid #3a2f0d;
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.15), 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #d4af37;
+    border: 1px solid #3a2f0d;
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(22px, 6vw, 26px);
+    font-weight: 800;
+    margin: 0 0 6px;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #d4af37, #f5e28c 50%, #d4af37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  p.tagline { color: #999; font-size: 13px; margin: 0 0 20px; }
+  .summary {
+    background: #161207;
+    border: 1px solid #2a2109;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    padding: 7px 0;
+    border-bottom: 1px solid #221c08;
+  }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-row span:first-child { color: #999; }
+  .summary-row span:last-child {
+    color: #eee;
+    max-width: 60%;
+    text-align: right;
+    overflow-wrap: break-word;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    margin-top: 6px;
+    border-top: 1px solid #3a2f0d;
+  }
+  .total-row span:first-child { font-size: 14px; color: #ccc; font-weight: 600; }
+  .total-row span:last-child { font-size: 20px; font-weight: 800; color: #f5e28c; }
+  button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #d4af37, #f5e28c);
+    color: #111;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  button:active { transform: scale(0.98); }
+  button:hover { opacity: 0.92; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  a.back-link {
+    display: block;
+    text-align: center;
+    color: #777;
+    font-size: 12.5px;
+    margin-top: 16px;
+    text-decoration: none;
+  }
+  a.back-link:hover { color: #aaa; }
+  #successMessage, #errorMessage {
+    display: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  #successMessage { background: #1f1a05; border: 1px solid #d4af37; color: #f5e28c; }
+  #successMessage b { color: #fff; letter-spacing: 1px; }
+  #errorMessage { background: #2b0d0d; border: 1px solid #5c1e1e; color: #e07f7f; }
+  #downloadLink {
+    display: none;
+    text-align: center;
+    margin-top: 14px;
+    color: #111;
+    background: linear-gradient(90deg, #d4af37, #f5e28c);
+    padding: 13px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .footer-note {
+    text-align: center;
+    color: #555;
+    font-size: 10.5px;
+    margin-top: 18px;
+  }
+  @media (max-width: 380px) {
+    .ticket-card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticket-card">
+  <span class="badge">DE ULTIMATE STEPPERS PRESENTS</span>
+  <h1>Checkout</h1>
+  <p class="tagline">Dance Fever 4.0 &middot; 10th Oct, 2026</p>
+
+  <div id="summary" class="summary"></div>
+
+  <button id="payButton">Pay ₦1,000</button>
+  <div id="soldOutMessage" style="display:none;background:#2b1e0d;border:1px solid #5c4a1e;color:#f0c876;padding:14px;border-radius:10px;font-size:13.5px;text-align:center;font-weight:600;">
+    🎟️ Sold Out — all tickets have been claimed.
+  </div>
+  <a class="back-link" href="ticket.html">&larr; Edit details</a>
+
+  <div id="successMessage"></div>
+  <a id="downloadLink" href="#">⬇ Download Ticket (PDF)</a>
+  <div id="errorMessage">No ticket details found. Please go back and fill the form.</div>
+
+  <p class="footer-note">Secured by Paystack · De Ultimate Steppers</p>
+</div>
+
+<script>
+  const EVENT = {
+    name: "DANCE FEVER 4.0",
+    presenter: "De Ultimate Steppers",
+    date: "10th Oct, 2026",
+    time: "4PM Prompt",
+    venue: "Wole Soyinka Hall, Theater Arts, University of Ibadan"
+  };
+  const TICKET_PRICE_NAIRA = 1000;
+  // TODO: replace with your actual Supabase project's functions URL, e.g.
+  // https://seueyfhafmhqxgbrdzjq.supabase.co/functions/v1
+  const SUPABASE_FUNCTIONS_URL = 'https://seueyfhafmhqxgbrdzjq.supabase.co/functions/v1';
+
+  const raw = sessionStorage.getItem('dus_ticket');
+  const payButton = document.getElementById('payButton');
+  const soldOutMessage = document.getElementById('soldOutMessage');
+
+  // Checks capacity before letting anyone pay. If the check itself fails
+  // (network hiccup, function not deployed yet), we fail open — don't block
+  // a paying customer over a connectivity issue — but log it so you notice.
+  function checkCapacity() {
+    fetch(`${SUPABASE_FUNCTIONS_URL}/ticket-count`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.sold_out) {
+          payButton.style.display = 'none';
+          soldOutMessage.style.display = 'block';
+        }
+      })
+      .catch((err) => console.warn('Capacity check failed, allowing payment:', err));
+  }
+
+  // Generates a short human-readable ticket tag like "SHY3124G" —
+  // 3 letters, 4 digits, 1 letter. This is what gets shown/scanned at the
+  // door, not the long Paystack reference.
+  function generateTicketTag() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const digits = '0123456789';
+    let tag = '';
+    for (let i = 0; i < 3; i++) tag += letters[Math.floor(Math.random() * letters.length)];
+    for (let i = 0; i < 4; i++) tag += digits[Math.floor(Math.random() * digits.length)];
+    tag += letters[Math.floor(Math.random() * letters.length)];
+    return tag;
+  }
+
+  if (!raw) {
+    payButton.style.display = 'none';
+    document.getElementById('summary').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'block';
+  } else {
+    const ticket = JSON.parse(raw);
+    checkCapacity();
+
+    document.getElementById('summary').innerHTML = `
+      <div class="summary-row"><span>Name</span><span>${ticket.fullName}</span></div>
+      <div class="summary-row"><span>Email</span><span>${ticket.email}</span></div>
+      <div class="total-row"><span>Total</span><span>₦${TICKET_PRICE_NAIRA.toLocaleString()}</span></div>
+    `;
+
+    // Loads poster.jpg so it can be drawn into the PDF. Resolves null if it
+    // fails to load (missing file, wrong path) so the ticket still generates.
+    function loadPosterImage() {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = 'poster.jpg';
+      });
+    }
+
+    function buildTicketPDF(ticket, ticketTag) {
+      return new Promise((resolve) => {
+        const qrHolder = document.createElement('div');
+        qrHolder.style.display = 'none';
+        document.body.appendChild(qrHolder);
+        new QRCode(qrHolder, { text: ticketTag, width: 200, height: 200 });
+
+        Promise.all([
+          new Promise((res) => setTimeout(res, 150)), // let QRCode.js render its canvas
+          loadPosterImage(),
+        ]).then(([, posterImg]) => {
+          const qrCanvas = qrHolder.querySelector('canvas');
+          const qrDataUrl = qrCanvas ? qrCanvas.toDataURL('image/png') : null;
+
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [100, 45] });
+
+          doc.setFillColor(0, 0, 0);
+          doc.rect(0, 0, 100, 45, 'F');
+
+          doc.setFillColor(212, 175, 55);
+          doc.rect(0, 0, 4, 45, 'F');
+
+          doc.setTextColor(212, 175, 55);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(15);
+          doc.text(EVENT.name, 10, 11);
+
+          doc.setTextColor(150, 150, 150);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7);
+          doc.text(EVENT.presenter, 10, 16);
+          doc.text(`${EVENT.date} - ${EVENT.time}`, 10, 20);
+          doc.text(EVENT.venue, 10, 24, { maxWidth: 55 });
+
+          doc.setTextColor(255, 255, 255);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(10);
+          doc.text(ticket.fullName, 10, 33);
+
+          doc.setTextColor(245, 226, 140);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(11);
+          doc.text(ticketTag, 10, 39);
+
+          doc.setTextColor(120, 120, 120);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(6);
+          doc.text('Ticket Tag — present at the door', 10, 42.5);
+
+          // Small resized poster thumbnail, top-right, above the QR code.
+          if (posterImg) {
+            const posterW = 13, posterH = 18; // keeps the poster's portrait aspect ratio
+            doc.addImage(posterImg, 'JPEG', 75, 2, posterW, posterH);
+          }
+
+          // QR code, below the poster thumbnail.
+          if (qrDataUrl) {
+            doc.addImage(qrDataUrl, 'PNG', 74, 21, 20, 20);
+          }
+
+          document.body.removeChild(qrHolder);
+          resolve(doc.output('bloburl'));
+        });
+      });
+    }
+
+    payButton.addEventListener('click', function () {
+      payButton.disabled = true;
+      payButton.textContent = 'Processing...';
+
+      const ticketTag = generateTicketTag();
+
+      const handler = PaystackPop.setup({
+        key: 'pk_live_f745f535b5e67eaa4d1b9f4b826a123caeb0bfc4', // TODO: swap for pk_live_ before the event
+        email: ticket.email,
+        amount: TICKET_PRICE_NAIRA * 100, // kobo
+        currency: 'NGN',
+        metadata: {
+          custom_fields: [
+            { display_name: "Full Name", variable_name: "full_name", value: ticket.fullName },
+            { display_name: "Ticket Tag", variable_name: "ticket_tag", value: ticketTag }
+          ]
+        },
+        callback: function (response) {
+          sessionStorage.removeItem('dus_ticket');
+          document.getElementById('summary').style.display = 'none';
+          payButton.style.display = 'none';
+          document.querySelector('.back-link').style.display = 'none';
+          document.getElementById('successMessage').style.display = 'block';
+          document.getElementById('successMessage').innerHTML =
+            `Payment successful! Your ticket tag: <b>${ticketTag}</b><br>` +
+            `Your PDF ticket is ready below.`;
+
+          buildTicketPDF(ticket, ticketTag).then((blobUrl) => {
+            const link = document.getElementById('downloadLink');
+            link.href = blobUrl;
+            link.download = `DanceFever4.0-Ticket-${ticketTag}.pdf`;
+            link.style.display = 'block';
+          });
+        },
+        onClose: function () {
+          payButton.disabled = false;
+          payButton.textContent = 'Pay ₦1,000';
+        }
+      });
+
+      handler.openIframe();
+    });
+  }
+</script>
+
+</body>
+</html>
