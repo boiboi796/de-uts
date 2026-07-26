@@ -291,11 +291,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .cta-primary {
     background: var(--accent);
     color: #fff;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 18px rgba(88, 42, 196, 0.45), 0 0 42px rgba(255, 106, 61, 0.18);
+    animation: ctaPulseGlow 2.6s ease-in-out infinite;
 }
 
 .cta-primary:hover {
     background: #7c4ceb;
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 22px rgba(88, 42, 196, 0.62), 0 0 54px rgba(255, 106, 61, 0.28);
 }
 
 .cta-secondary {
@@ -307,6 +310,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .cta-secondary:hover {
     border-color: var(--text);
     transform: translateY(-2px);
+}
+
+@keyframes ctaPulseGlow {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 18px rgba(88, 42, 196, 0.4), 0 0 42px rgba(255, 106, 61, 0.16);
+    }
+    50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 28px rgba(88, 42, 196, 0.7), 0 0 60px rgba(255, 106, 61, 0.32);
+    }
 }
 
 /* ============================================
