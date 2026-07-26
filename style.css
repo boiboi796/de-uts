@@ -15,7 +15,7 @@
     --text-muted: rgba(245, 245, 244, 0.62);
     --text-faint: rgba(245, 245, 244, 0.38);
 
-    --accent: #8b5cf6;       /* violet — motion, focus */
+    --accent: #582ac4;       /* violet — motion, focus */
     --accent-dim: rgba(139, 92, 246, 0.14);
     --accent-2: #ff6a3d;     /* warm orange — energy pop */
     --accent-2-dim: rgba(255, 106, 61, 0.14);
@@ -454,6 +454,7 @@ section {
 .about-content.reverse { margin-top: 120px; }
 .about-content.reverse .about-text { order: 1; }
 .about-content.reverse .about-visual { order: 0; }
+.about-update { margin-top: 120px; }
 
 .about-text h2 {
     font-family: var(--font-display);
@@ -482,7 +483,9 @@ section {
 
 .about-gallery {
     position: relative;
+    width: min(100%, 420px);
     aspect-ratio: 4 / 5;
+    justify-self: center;
     border-radius: var(--radius-lg);
     background:
         linear-gradient(160deg, rgba(139,92,246,0.35), rgba(255,106,61,0.25)),
@@ -810,6 +813,17 @@ footer {
     .cta-container { margin-top: 32px; }
 
     .feature-list { grid-template-columns: 1fr; }
+
+    .about-update { margin-top: 80px; }
+
+    #updateGallery {
+        padding: 16px;
+    }
+
+    #updateGallery .gallery-image {
+        object-fit: contain;
+        transform: scale(1);
+    }
 
     .contact-form { padding: 32px 24px; }
 }

@@ -111,18 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ---------- About gallery: rotate real photos ---------- */
-    const galleryContainer = document.getElementById('aboutGallery');
+    /* ---------- About galleries: rotate showcase and poster ---------- */
+    function initRotatingGallery(containerId, galleryImages, fallbackText, imageAlt) {
+        const galleryContainer = document.getElementById(containerId);
 
-    if (galleryContainer) {
-        const galleryImages = [
-            'images/gallery/step-01.png',
-            'images/gallery/step-02.png',
-            'images/gallery/step-03.png',
-            'images/gallery/step-04.png',
-            'images/gallery/step-05.png',
-            'images/gallery/step-06.png'
-        ];
+        if (!galleryContainer) return;
 
         const shuffled = [...galleryImages].sort(() => Math.random() - 0.5);
 
@@ -130,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.className = 'gallery-image';
             img.src = src;
-            img.alt = 'De Ultimate Steppers gallery image';
+            img.alt = imageAlt;
             img.loading = 'lazy';
             if (index === 0) img.classList.add('active');
 
@@ -145,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!loaded.length) {
                 const fallback = document.createElement('p');
                 fallback.className = 'gallery-fallback';
-                fallback.textContent = 'Drop photos into images/gallery/ to power this showcase.';
+                fallback.textContent = fallbackText;
                 galleryContainer.appendChild(fallback);
                 return;
             }
@@ -160,6 +153,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2600);
         }, 300);
     }
+
+    initRotatingGallery(
+        'aboutGallery',
+        [
+            'images/gallery/step-01.png',
+            'images/gallery/step-02.png',
+            'images/gallery/step-03.png',
+            'images/gallery/step-04.png',
+            'images/gallery/step-05.png',
+            'images/gallery/step-06.png'
+        ],
+        'Drop photos into images/gallery/ to power this showcase.',
+        'De Ultimate Steppers gallery image'
+    );
+
+    initRotatingGallery(
+        'updateGallery',
+        ['poster.jpg'],
+        'Replace poster.jpg to change this update showcase.',
+        'De Ultimate Steppers update poster'
+    );
 
     /* ---------- Scroll-reveal for sections ---------- */
     const revealTargets = document.querySelectorAll('.about-content, .feature-content, .contact-container');
