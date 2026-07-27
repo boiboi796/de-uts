@@ -245,12 +245,10 @@
     name: "DANCE FEVER 4.0",
     presenter: "De Ultimate Steppers",
     date: "10th Oct, 2026",
-    time: "4PM Prompt",
+    time: "2:00PM Prompt",
     venue: "Wole Soyinka Hall, Theater Arts, University of Ibadan"
   };
   const TICKET_PRICE_NAIRA = 1000;
-  // TODO: replace with your actual Supabase project's functions URL, e.g.
-  // https://seueyfhafmhqxgbrdzjq.supabase.co/functions/v1
   const SUPABASE_FUNCTIONS_URL = 'https://seueyfhafmhqxgbrdzjq.supabase.co/functions/v1';
 
   const raw = sessionStorage.getItem('dus_ticket');
@@ -261,6 +259,7 @@
   const cancelPaymentButton = document.getElementById('cancelPaymentButton');
   let activePaystackHandler = null;
   let closingPromptActive = false;
+  let paymentSucceeded = false; // guards against onClose firing after a successful callback
 
   // Checks capacity before letting anyone pay. If the check itself fails
   // (network hiccup, function not deployed yet), we fail open — don't block
@@ -391,7 +390,7 @@
       const ticketTag = generateTicketTag();
 
       activePaystackHandler = PaystackPop.setup({
-        key: 'pk_live_f745f535b5e67eaa4d1b9f4b826a123caeb0bfc4', // TODO: swap for pk_live_ before the event
+        key: 'pk_live_f745f535b5e67eaa4d1b9f4b826a123caeb0bfc4',
         email: ticket.email,
         amount: TICKET_PRICE_NAIRA * 100, // kobo
         currency: 'NGN',
@@ -402,6 +401,7 @@
           ]
         },
         callback: function (response) {
+          paymentSucceeded = true; // must be set before anything else so onClose sees it
           sessionStorage.removeItem('dus_ticket');
           document.getElementById('summary').style.display = 'none';
           payButton.style.display = 'none';
@@ -419,7 +419,7 @@
           });
         },
         onClose: function () {
-          if (closingPromptActive) {
+          if (closingPromptActive || paymentSucceeded) {
             return;
           }
 
