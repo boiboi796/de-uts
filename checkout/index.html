@@ -245,7 +245,7 @@
     name: "DANCE FEVER 4.0",
     presenter: "De Ultimate Steppers",
     date: "10th Oct, 2026",
-    time: "2:00PM Prompt",
+    time: "4PM Prompt",
     venue: "Wole Soyinka Hall, Theater Arts, University of Ibadan"
   };
   const TICKET_PRICE_NAIRA = 1000;
@@ -289,7 +289,135 @@
     return tag;
   }
 
-  if (!raw) {
+  // Loads poster.jpg so it can be drawn into the PDF. Resolves null if it
+  // fails to load (missing file, wrong path) so the ticket still generates.
+  function loadPosterImage() {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = '../poster.jpg';
+    });
+  }
+
+  // Top-level (not nested inside the payment flow) so it can also be called
+  // when restoring an already-paid ticket after a refresh, not just right
+  // after a fresh successful payment.
+  function buildTicketPDF(ticket, ticketTag) {
+    return new Promise((resolve) => {
+      const qrHolder = document.createElement('div');
+      qrHolder.style.display = 'none';
+      document.body.appendChild(qrHolder);
+      new QRCode(qrHolder, { text: ticketTag, width: 200, height: 200 });
+
+      Promise.all([
+        new Promise((res) => setTimeout(res, 150)), // let QRCode.js render its canvas
+        loadPosterImage(),
+      ]).then(([, posterImg]) => {
+        const qrCanvas = qrHolder.querySelector('canvas');
+        const qrDataUrl = qrCanvas ? qrCanvas.toDataURL('image/png') : null;
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [100, 45] });
+
+        doc.setFillColor(0, 0, 0);
+        doc.rect(0, 0, 100, 45, 'F');
+
+        doc.setFillColor(212, 175, 55);
+        doc.rect(0, 0, 4, 45, 'F');
+
+        doc.setTextColor(212, 175, 55);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.text(EVENT.name, 10, 11);
+
+        doc.setTextColor(150, 150, 150);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text(EVENT.presenter, 10, 16);
+        doc.text(`${EVENT.date} - ${EVENT.time}`, 10, 20);
+        doc.text(EVENT.venue, 10, 24, { maxWidth: 55 });
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.text(ticket.fullName, 10, 33);
+
+        doc.setTextColor(245, 226, 140);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text(ticketTag, 10, 39);
+
+        doc.setTextColor(120, 120, 120);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6);
+        doc.text('Ticket Tag — present at the door', 10, 42.5);
+
+        // Small resized poster thumbnail, top-right, above the QR code.
+        if (posterImg) {
+          const posterW = 13, posterH = 18; // keeps the poster's portrait aspect ratio
+          doc.addImage(posterImg, 'JPEG', 75, 2, posterW, posterH);
+        }
+
+        // QR code, below the poster thumbnail.
+        if (qrDataUrl) {
+          doc.addImage(qrDataUrl, 'PNG', 74, 21, 20, 20);
+        }
+
+        document.body.removeChild(qrHolder);
+        resolve(doc.output('bloburl'));
+      });
+    });
+  }
+
+  // Shows the success UI and (re)builds the PDF for download. Used both
+  // right after a fresh successful payment AND when restoring an
+  // already-paid ticket after a page refresh — same result either way.
+  function showSuccessState(ticket, ticketTag, isRestored) {
+    document.getElementById('summary').style.display = 'none';
+    payButton.style.display = 'none';
+    soldOutMessage.style.display = 'none';
+    document.querySelector('.back-link').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'none';
+
+    const successBox = document.getElementById('successMessage');
+    successBox.style.display = 'block';
+    successBox.innerHTML =
+      (isRestored
+        ? `Welcome back! Here's your ticket again — `
+        : `Payment successful! `) +
+      `Your ticket tag: <b>${ticketTag}</b><br>Your PDF ticket is ready below.`;
+
+    buildTicketPDF(ticket, ticketTag).then((blobUrl) => {
+      const link = document.getElementById('downloadLink');
+      link.href = blobUrl;
+      link.download = `DanceFever4.0-Ticket-${ticketTag}.pdf`;
+      link.style.display = 'block';
+    }).catch((err) => {
+      console.error('PDF generation failed:', err);
+      successBox.innerHTML +=
+        `<br><br>⚠ Your ticket tag above is valid, but we couldn't generate ` +
+        `the PDF right now (likely a slow connection). Refresh this page and ` +
+        `it should retry, or check your email — your ticket is also sent there.`;
+    });
+  }
+
+  // Checks for an already-paid ticket saved after a successful payment
+  // (survives refreshes AND closing the tab, unlike sessionStorage) before
+  // falling back to the normal "collect payment" flow. This is what makes
+  // an accidental refresh right after paying harmless instead of a lost
+  // ticket — the page just shows the same ticket again.
+  const completedRaw = localStorage.getItem('dus_completed_ticket');
+
+  if (!raw && completedRaw) {
+    const completed = JSON.parse(completedRaw);
+    showSuccessState({ fullName: completed.fullName, email: completed.email }, completed.ticketTag, true);
+
+    const backLink = document.querySelector('.back-link');
+    backLink.style.display = 'block';
+    backLink.textContent = 'Buy another ticket';
+    backLink.addEventListener('click', () => localStorage.removeItem('dus_completed_ticket'));
+  } else if (!raw) {
     payButton.style.display = 'none';
     document.getElementById('summary').style.display = 'none';
     document.getElementById('errorMessage').style.display = 'block';
@@ -297,89 +425,30 @@
     const ticket = JSON.parse(raw);
     checkCapacity();
 
+    // Confirms jsPDF and QRCode.js (loaded from CDN) are actually ready.
+    // Without this, a buyer on a slow connection who pays fast could hit
+    // "Pay Now" before these scripts finish loading — buildTicketPDF would
+    // then throw immediately and fail with no visible error.
+    function librariesReady() {
+      return typeof window.jspdf !== 'undefined' && typeof QRCode !== 'undefined';
+    }
+    if (!librariesReady()) {
+      payButton.disabled = true;
+      payButton.textContent = 'Loading...';
+      const readyCheck = setInterval(() => {
+        if (librariesReady()) {
+          clearInterval(readyCheck);
+          payButton.disabled = false;
+          payButton.textContent = 'Pay ₦1,000';
+        }
+      }, 200);
+    }
+
     document.getElementById('summary').innerHTML = `
       <div class="summary-row"><span>Name</span><span>${ticket.fullName}</span></div>
       <div class="summary-row"><span>Email</span><span>${ticket.email}</span></div>
       <div class="total-row"><span>Total</span><span>₦${TICKET_PRICE_NAIRA.toLocaleString()}</span></div>
     `;
-
-    // Loads poster.jpg so it can be drawn into the PDF. Resolves null if it
-    // fails to load (missing file, wrong path) so the ticket still generates.
-    function loadPosterImage() {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => resolve(null);
-        img.src = '../poster.jpg';
-      });
-    }
-
-    function buildTicketPDF(ticket, ticketTag) {
-      return new Promise((resolve) => {
-        const qrHolder = document.createElement('div');
-        qrHolder.style.display = 'none';
-        document.body.appendChild(qrHolder);
-        new QRCode(qrHolder, { text: ticketTag, width: 200, height: 200 });
-
-        Promise.all([
-          new Promise((res) => setTimeout(res, 150)), // let QRCode.js render its canvas
-          loadPosterImage(),
-        ]).then(([, posterImg]) => {
-          const qrCanvas = qrHolder.querySelector('canvas');
-          const qrDataUrl = qrCanvas ? qrCanvas.toDataURL('image/png') : null;
-
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [100, 45] });
-
-          doc.setFillColor(0, 0, 0);
-          doc.rect(0, 0, 100, 45, 'F');
-
-          doc.setFillColor(212, 175, 55);
-          doc.rect(0, 0, 4, 45, 'F');
-
-          doc.setTextColor(212, 175, 55);
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(15);
-          doc.text(EVENT.name, 10, 11);
-
-          doc.setTextColor(150, 150, 150);
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(7);
-          doc.text(EVENT.presenter, 10, 16);
-          doc.text(`${EVENT.date} - ${EVENT.time}`, 10, 20);
-          doc.text(EVENT.venue, 10, 24, { maxWidth: 55 });
-
-          doc.setTextColor(255, 255, 255);
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(10);
-          doc.text(ticket.fullName, 10, 33);
-
-          doc.setTextColor(245, 226, 140);
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(11);
-          doc.text(ticketTag, 10, 39);
-
-          doc.setTextColor(120, 120, 120);
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(6);
-          doc.text('Ticket Tag — present at the door', 10, 42.5);
-
-          // Small resized poster thumbnail, top-right, above the QR code.
-          if (posterImg) {
-            const posterW = 13, posterH = 18; // keeps the poster's portrait aspect ratio
-            doc.addImage(posterImg, 'JPEG', 75, 2, posterW, posterH);
-          }
-
-          // QR code, below the poster thumbnail.
-          if (qrDataUrl) {
-            doc.addImage(qrDataUrl, 'PNG', 74, 21, 20, 20);
-          }
-
-          document.body.removeChild(qrHolder);
-          resolve(doc.output('bloburl'));
-        });
-      });
-    }
 
     payButton.addEventListener('click', function () {
       payButton.disabled = true;
@@ -403,20 +472,16 @@
         callback: function (response) {
           paymentSucceeded = true; // must be set before anything else so onClose sees it
           sessionStorage.removeItem('dus_ticket');
-          document.getElementById('summary').style.display = 'none';
-          payButton.style.display = 'none';
-          document.querySelector('.back-link').style.display = 'none';
-          document.getElementById('successMessage').style.display = 'block';
-          document.getElementById('successMessage').innerHTML =
-            `Payment successful! Your ticket tag: <b>${ticketTag}</b><br>` +
-            `Your PDF ticket is ready below.`;
 
-          buildTicketPDF(ticket, ticketTag).then((blobUrl) => {
-            const link = document.getElementById('downloadLink');
-            link.href = blobUrl;
-            link.download = `DanceFever4.0-Ticket-${ticketTag}.pdf`;
-            link.style.display = 'block';
-          });
+          // Persisted (not sessionStorage) so a refresh or even closing and
+          // reopening the tab still shows the same ticket instead of losing it.
+          localStorage.setItem('dus_completed_ticket', JSON.stringify({
+            fullName: ticket.fullName,
+            email: ticket.email,
+            ticketTag: ticketTag
+          }));
+
+          showSuccessState(ticket, ticketTag, false);
         },
         onClose: function () {
           if (closingPromptActive || paymentSucceeded) {
