@@ -384,9 +384,10 @@
     successBox.style.display = 'block';
     successBox.innerHTML =
       (isRestored
-        ? `Welcome back! Here's your ticket again — `
+        ? `Welcome back! Here's your ticket again, `
         : `Payment successful! `) +
-      `Your ticket tag: <b>${ticketTag}</b><br>Your PDF ticket is ready below.`;
+      `Your ticket tag: <b>${ticketTag}</b><br>Your PDF ticket is ready below.`
+      `<br><br>(A copy has also been sent to your email.)`;
 
     buildTicketPDF(ticket, ticketTag).then((blobUrl) => {
       const link = document.getElementById('downloadLink');
