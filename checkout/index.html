@@ -388,7 +388,8 @@
         ? `Welcome back! Here's your ticket again, `
         : `Payment successful! `) +
       `Your ticket tag: <b>${ticketTag}</b><br>Your PDF ticket is ready below.` +
-      `<br><br>(A copy has also been sent to your email.)`;
+      `<br><br>(A copy has also been sent to your email.)`+
+      `<br><br><a href="https://chat.whatsapp.com/ClARTWeXUaP0emRteEnoBj" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#25D366;color:#07140b;padding:10px 16px;border-radius:8px;font-weight:700;text-decoration:none;">Join WhatsApp for more updates</a>`;
 
     buildTicketPDF(ticket, ticketTag).then((blobUrl) => {
       const link = document.getElementById('downloadLink');
