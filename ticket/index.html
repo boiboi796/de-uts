@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -189,5 +189,232 @@
   });
 </script>
 
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Online tickets closed | Get yours at the venue</title>
+<meta name="description" content="Online ticket sales have closed. Tickets are available at the venue on the day.">
+<style>
+  :root {
+    --ink: #1c1233;
+    --ink-soft: #2a1d4a;
+    --chalk: #f7f2ff;
+    --muted: #b9acd6;
+    --gold: #ffb627;
+    --rose: #e0407a;
+    --stub-bg: #f7f2ff;
+    --stub-ink: #1c1233;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background:
+      radial-gradient(120% 60% at 50% 0%, var(--ink-soft) 0%, var(--ink) 70%);
+    color: var(--chalk);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: max(24px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom));
+  }
+
+  main {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .brand {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 34ch;
+  }
+
+  /* The ticket stub: the one memorable element */
+  .stub {
+    position: relative;
+    background: var(--stub-bg);
+    color: var(--stub-ink);
+    border-radius: 18px;
+    padding: 26px 22px 24px;
+    /* notches on the left and right edges at the perforation line */
+    -webkit-mask:
+      radial-gradient(circle 12px at 0 var(--perf), transparent 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle 12px at 100% var(--perf), transparent 98%, #000) right / 51% 100% no-repeat;
+            mask:
+      radial-gradient(circle 12px at 0 var(--perf), transparent 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle 12px at 100% var(--perf), transparent 98%, #000) right / 51% 100% no-repeat;
+    --perf: 138px;
+  }
+
+  .stub-top {
+    height: 92px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .stub-top strong {
+    font-size: 1.75rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .stub-top span {
+    font-size: 0.98rem;
+    color: #5b4d82;
+  }
+
+  .perforation {
+    border-top: 2px dashed #c9bde6;
+    margin: 20px -6px 22px;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px 18px;
+  }
+
+  dt {
+    font-size: 0.92rem;
+    color: #5b4d82;
+    font-weight: 600;
+  }
+
+  dd {
+    font-weight: 700;
+    font-size: 1.02rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .note {
+    font-size: 0.95rem;
+    color: var(--muted);
+    border-left: 3px solid var(--gold);
+    padding-left: 14px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 0 20px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .btn-secondary {
+    border: 2px solid var(--muted);
+    color: var(--chalk);
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  .btn:focus-visible {
+    outline: 3px solid var(--chalk);
+    outline-offset: 3px;
+  }
+
+  footer {
+    margin-top: auto;
+    padding-top: 28px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    body { justify-content: center; padding-top: 48px; padding-bottom: 48px; }
+    main { gap: 34px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn:active { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <p class="brand">YOUR EVENT NAME</p>
+
+    <header>
+      <h1>Online tickets have closed.</h1>
+      <p class="lede">You can still get in. Tickets are on sale at the venue on the day.</p>
+    </header>
+
+    <section class="stub" aria-label="Where to get a ticket">
+      <div class="stub-top">
+        <strong>Buy at the venue</strong>
+        <span>Pay at the ticket desk when you arrive</span>
+      </div>
+      <div class="perforation" aria-hidden="true"></div>
+      <dl>
+        <dt>Date</dt>
+        <dd>Sunday, 11th October, 2026</dd>
+
+        <dt>Doors open</dt>
+        <dd>2:00 PM</dd>
+
+        <dt>Venue</dt>
+        <dd>Wole Soyinka Theatre, University of Ibadan</dd>
+
+        <dt>Price</dt>
+        <dd>₦1,500</dd>
+      </dl>
+    </section>
+
+    <p class="note">Come early. Gate tickets are limited and the queue can get long.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="https://www.google.com/maps?gs_lcrp=EgZjaHJvbWUqEAgBEC4YrwEYxwEYgAQYtAcyDQgAEAAY4wIYgAQYtAcyEAgBEC4YrwEYxwEYgAQYtAcyBwgCEAAYgAQyBggDEEUYOTIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDg0NjZqMGo3qAIAsAIA&um=1&ie=UTF-8&fb=1&gl=ng&sa=X&geocode=KbsVR5CY8jkQMZaCLfgy0nUc&daddr=CVVX%2BFQ4,+Social+Sciences+Road,+Ibadan+200132,+Oyo" target="_blank" rel="noopener">Get directions</a>
+    </div>
+  </main>
+
+  <footer>Questions? Message us on Instagram or WhatsApp.</footer>
 </body>
 </html>
