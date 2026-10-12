@@ -1,327 +1,97 @@
 <!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dance Fever 4.0 — Get Your Ticket</title>
-<link rel="icon" type="image/png" href="../images/logo.png">
-<link rel="apple-touch-icon" href="../images/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  * { box-sizing: border-box; }
-  body {
-    position: relative;
-    isolation: isolate;
-    background: radial-gradient(circle at 50% 0%, #1a1206 0%, #000 60%);
-    color: #fff;
-    font-family: 'Poppins', 'Segoe UI', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 24px 16px;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: url('../poster.jpg') center center / cover no-repeat;
-    opacity: 0.08;
-    filter: saturate(0.85) brightness(0.8);
-    pointer-events: none;
-    z-index: -1;
-  }
-  .ticket-card {
-    position: relative;
-    z-index: 1;
-    background: #0e0e0e;
-    border: 1px solid #3a2f0d;
-    border-radius: 18px;
-    padding: 28px 24px;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: 0 0 50px rgba(212, 175, 55, 0.15), 0 20px 40px rgba(0,0,0,0.5);
-  }
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: #d4af37;
-    border: 1px solid #3a2f0d;
-    border-radius: 20px;
-    padding: 4px 12px;
-    margin-bottom: 14px;
-  }
-  h1 {
-    font-size: clamp(24px, 6vw, 30px);
-    font-weight: 800;
-    margin: 0 0 6px;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg, #d4af37, #f5e28c 50%, #d4af37);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  p.tagline { color: #999; font-size: 13px; margin: 0 0 16px; }
-  .event-details {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: #161207;
-    border: 1px solid #2a2109;
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 22px;
-  }
-  .event-details .row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
-    color: #e8d9a8;
-  }
-  .event-details .row .icon { font-size: 14px; }
-  label {
-    display: block;
-    font-size: 11px;
-    color: #999;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 13px 14px;
-    margin-bottom: 16px;
-    background: #000;
-    border: 1px solid #3a2f0d;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 15px;
-    font-family: inherit;
-    transition: border-color 0.2s;
-  }
-  input:focus {
-    outline: none;
-    border-color: #d4af37;
-  }
-  .price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(90deg, rgba(212,175,55,0.12), rgba(245,226,140,0.06));
-    border: 1px solid #3a2f0d;
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 20px;
-  }
-  .price-row span:first-child { font-size: 13px; color: #ccc; }
-  .price-row span:last-child { font-size: 18px; font-weight: 700; color: #f5e28c; }
-  button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #d4af37, #f5e28c);
-    color: #111;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 15px;
-    font-family: inherit;
-    transition: transform 0.15s, opacity 0.15s;
-  }
-  button:active { transform: scale(0.98); }
-  button:hover { opacity: 0.92; }
-  .footer-note {
-    text-align: center;
-    color: #555;
-    font-size: 10.5px;
-    margin-top: 16px;
-  }
-  @media (max-width: 380px) {
-    .ticket-card { padding: 22px 18px; }
-  }
-</style>
-</head>
-<body>
-
-<div class="ticket-card">
-  <span class="badge">DE ULTIMATE STEPPERS PRESENTS</span>
-  <h1>DANCE FEVER 4.0</h1>
-  <p class="tagline">Move. Feel. Become.</p>
-
-  <div class="event-details">
-    <div class="row"><span class="icon">📅</span><span>11th Oct, 2026 &middot; 2:00PM Prompt</span></div>
-    <div class="row"><span class="icon">📍</span><span>Wole Soyinka Hall, Theater Arts, UI</span></div>
-  </div>
-
-  <form id="ticketForm">
-    <label for="fullName">Full Name</label>
-    <input type="text" id="fullName" placeholder="e.g. Dance Engine" required>
-
-    <label for="email">Email (must be a valid email address)</label>
-    <input type="email" id="email" placeholder="e.g. deultimatesteppers@email.com" required>
-
-    <div class="price-row">
-      <span>Ticket Price</span>
-      <span>₦1,000</span>
-    </div>
-
-    <button type="submit">Continue to Payment</button>
-  </form>
-
-  <p class="footer-note">Secured by Paystack · De Ultimate Steppers</p>
-</div>
-
-<script>
-  document.getElementById('ticketForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const ticketData = {
-      fullName: document.getElementById('fullName').value,
-      email: document.getElementById('email').value
-    };
-
-    sessionStorage.setItem('dus_ticket', JSON.stringify(ticketData));
-    window.location.href = '../checkout/';
-  });
-</script>
-
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Online tickets closed | Get yours at the venue</title>
-<meta name="description" content="Online ticket sales have closed. Tickets are available at the venue on the day.">
+<title>Thank you for coming | Dance Fever 4.0</title>
+<meta name="description" content="Thank you for being part of Dance Fever 4.0. Dance Fever 5.0 is coming soon.">
 <style>
   :root {
-    --ink: #1c1233;
-    --ink-soft: #2a1d4a;
-    --chalk: #f7f2ff;
-    --muted: #b9acd6;
-    --gold: #ffb627;
-    --rose: #e0407a;
-    --stub-bg: #f7f2ff;
-    --stub-ink: #1c1233;
+    --night: #120b0a;
+    --ember: #1f1210;
+    --gold: #f2b53a;
+    --flame: #ff6a1f;
+    --red: #e02d2d;
+    --chalk: #fbf3ea;
+    --muted: #c1ab9b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { -webkit-text-size-adjust: 100%; }
 
   body {
     min-height: 100vh;
     min-height: 100dvh;
     background:
-      radial-gradient(120% 60% at 50% 0%, var(--ink-soft) 0%, var(--ink) 70%);
+      radial-gradient(90% 45% at 50% 100%, rgba(255, 106, 31, 0.28) 0%, rgba(255, 106, 31, 0) 70%),
+      var(--night);
     color: var(--chalk);
     font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.5;
+    line-height: 1.55;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: max(24px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom));
+    padding: max(28px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
   }
 
   main {
     width: 100%;
     max-width: 440px;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .brand {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0.01em;
-  }
-
-  h1 {
-    font-size: clamp(2.4rem, 11vw, 3.4rem);
-    line-height: 1.02;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-
-  .lede {
-    color: var(--muted);
-    font-size: 1.05rem;
-    max-width: 34ch;
-  }
-
-  /* The ticket stub: the one memorable element */
-  .stub {
-    position: relative;
-    background: var(--stub-bg);
-    color: var(--stub-ink);
-    border-radius: 18px;
-    padding: 26px 22px 24px;
-    /* notches on the left and right edges at the perforation line */
-    -webkit-mask:
-      radial-gradient(circle 12px at 0 var(--perf), transparent 98%, #000) left / 51% 100% no-repeat,
-      radial-gradient(circle 12px at 100% var(--perf), transparent 98%, #000) right / 51% 100% no-repeat;
-            mask:
-      radial-gradient(circle 12px at 0 var(--perf), transparent 98%, #000) left / 51% 100% no-repeat,
-      radial-gradient(circle 12px at 100% var(--perf), transparent 98%, #000) right / 51% 100% no-repeat;
-    --perf: 138px;
-  }
-
-  .stub-top {
-    height: 92px;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 4px;
+    gap: 28px;
   }
 
-  .stub-top strong {
-    font-size: 1.75rem;
-    line-height: 1.1;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-
-  .stub-top span {
+  .presenter {
     font-size: 0.98rem;
-    color: #5b4d82;
-  }
-
-  .perforation {
-    border-top: 2px dashed #c9bde6;
-    margin: 20px -6px 22px;
-  }
-
-  dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 14px 18px;
-  }
-
-  dt {
-    font-size: 0.92rem;
-    color: #5b4d82;
+    color: var(--muted);
     font-weight: 600;
   }
 
-  dd {
-    font-weight: 700;
-    font-size: 1.02rem;
-    text-align: right;
-    overflow-wrap: anywhere;
+  h1 {
+    font-size: clamp(2.6rem, 13vw, 3.8rem);
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.035em;
   }
 
-  .note {
-    font-size: 0.95rem;
+  .fever {
+    display: block;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--flame) 55%, var(--red) 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+            color: transparent;
+    padding-bottom: 0.06em;
+  }
+
+  .lede {
+    font-size: 1.08rem;
     color: var(--muted);
-    border-left: 3px solid var(--gold);
-    padding-left: 14px;
+    max-width: 36ch;
+  }
+
+  .next {
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 22px 20px;
+    background: var(--ember);
+  }
+
+  .next h2 {
+    font-size: 1.5rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .next p {
+    color: var(--muted);
+    font-size: 1rem;
   }
 
   .actions {
@@ -343,35 +113,19 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .btn-primary {
-    background: var(--gold);
-    color: var(--ink);
-  }
-
-  .btn-secondary {
-    border: 2px solid var(--muted);
-    color: var(--chalk);
-  }
-
+  .btn-primary { background: var(--gold); color: var(--night); }
+  .btn-secondary { border: 2px solid var(--muted); color: var(--chalk); }
   .btn:active { transform: scale(0.98); }
-
-  .btn:focus-visible {
-    outline: 3px solid var(--chalk);
-    outline-offset: 3px;
-  }
+  .btn:focus-visible { outline: 3px solid var(--chalk); outline-offset: 3px; }
 
   footer {
-    margin-top: auto;
     padding-top: 28px;
-    font-size: 0.85rem;
-    color: var(--muted);
     text-align: center;
+    font-size: 0.88rem;
+    color: var(--muted);
   }
 
-  @media (min-width: 640px) {
-    body { justify-content: center; padding-top: 48px; padding-bottom: 48px; }
-    main { gap: 34px; }
-  }
+  footer strong { color: var(--chalk); font-weight: 700; }
 
   @media (prefers-reduced-motion: reduce) {
     .btn:active { transform: none; }
@@ -380,41 +134,29 @@
 </head>
 <body>
   <main>
-    <p class="brand">YOUR EVENT NAME</p>
+    <p class="presenter">De Ultimate Steppers</p>
 
     <header>
-      <h1>Online tickets have closed.</h1>
-      <p class="lede">You can still get in. Tickets are on sale at the venue on the day.</p>
+      <h1>
+        Thank you for coming to
+        <span class="fever">Dance Fever 4.0</span>
+      </h1>
+      <p class="lede" style="margin-top:18px;">
+        You filled the hall with energy and made the night what it was. We are grateful you spent it with us.
+      </p>
     </header>
 
-    <section class="stub" aria-label="Where to get a ticket">
-      <div class="stub-top">
-        <strong>Buy at the venue</strong>
-        <span>Pay at the ticket desk when you arrive</span>
-      </div>
-      <div class="perforation" aria-hidden="true"></div>
-      <dl>
-        <dt>Date</dt>
-        <dd>Sunday, 11th October, 2026</dd>
-
-        <dt>Doors open</dt>
-        <dd>2:00 PM</dd>
-
-        <dt>Venue</dt>
-        <dd>Wole Soyinka Theatre, University of Ibadan</dd>
-
-        <dt>Price</dt>
-        <dd>₦1,500</dd>
-      </dl>
+    <section class="next" aria-label="Next event">
+      <h2>Dance Fever 5.0 is coming soon.</h2>
+      <p>Follow us to be the first to hear the date, the venue and when tickets open.</p>
     </section>
 
-    <p class="note">Come early. Gate tickets are limited and the queue can get long.</p>
-
     <div class="actions">
-      <a class="btn btn-primary" href="https://www.google.com/maps?gs_lcrp=EgZjaHJvbWUqEAgBEC4YrwEYxwEYgAQYtAcyDQgAEAAY4wIYgAQYtAcyEAgBEC4YrwEYxwEYgAQYtAcyBwgCEAAYgAQyBggDEEUYOTIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDg0NjZqMGo3qAIAsAIA&um=1&ie=UTF-8&fb=1&gl=ng&sa=X&geocode=KbsVR5CY8jkQMZaCLfgy0nUc&daddr=CVVX%2BFQ4,+Social+Sciences+Road,+Ibadan+200132,+Oyo" target="_blank" rel="noopener">Get directions</a>
+      <a class="btn btn-primary" href="https://www.youtube.com/@deultimatesteppers" target="_blank" rel="noopener">Watch us on YouTube</a>
+      <a class="btn btn-secondary" href="https://de-ultimate-steppers.tech" target="_blank" rel="noopener">Visit our website</a>
     </div>
   </main>
 
-  <footer>Questions? Message us on Instagram or WhatsApp.</footer>
+  <footer><strong>Move. Feel. Become.</strong></footer>
 </body>
 </html>
