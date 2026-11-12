@@ -96,7 +96,8 @@
             gap: 16px;
             padding: 8px 16px 32px;
             max-width: 1100px;
-            margin: auto
+            margin: auto;
+            min-width: 0
         }
 
         @media(min-width:900px) {
@@ -110,7 +111,14 @@
             background: var(--card);
             border: 1px solid var(--line);
             border-radius: 20px;
-            padding: 16px
+            padding: 16px;
+            min-width: 0;
+            max-width: 100%
+        }
+
+        .side {
+            min-width: 0;
+            max-width: 100%
         }
 
         canvas {
@@ -170,6 +178,10 @@
             font-size: 20px;
             font-weight: 700;
             margin-top: 12px;
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis
@@ -250,6 +262,28 @@
             min-height: 44px
         }
 
+        .fine-tune-toggle {
+            width: 100%;
+            min-height: 44px;
+            padding: 12px 0;
+            border: 0;
+            border-radius: 0;
+            background: none;
+            color: var(--mu);
+            text-align: left
+        }
+
+        .fine-tune-toggle::before {
+            content: "▸";
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform .15s
+        }
+
+        .fine-tune-toggle[aria-expanded=true]::before {
+            transform: rotate(90deg)
+        }
+
         .tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -296,7 +330,10 @@
 
         #list {
             max-height: 320px;
-            overflow: auto;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
             margin: 10px 0
         }
 
@@ -315,7 +352,11 @@
             padding: 4px 8px;
             border-radius: 12px;
             cursor: pointer;
-            min-height: 48px
+            min-height: 48px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow: hidden
         }
 
         .it:hover {
@@ -329,7 +370,10 @@
         }
 
         .it span {
+            display: block;
             flex: 1;
+            min-width: 0;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap
@@ -338,7 +382,8 @@
         .it button {
             border: 0;
             background: none;
-            color: var(--mu)
+            color: var(--mu);
+            flex: 0 0 auto
         }
 
         #drop {
@@ -722,10 +767,9 @@
                     <option value="chaos">Chaos</option>
                 </select>
                 <div id="sliders" style="margin-top:8px"></div>
-                <details>
-                    <summary>Fine-tune</summary>
-                    <div id="adv"></div>
-                </details>
+                <button type="button" class="fine-tune-toggle" id="fineTuneToggle" aria-expanded="false"
+                    aria-controls="adv">Fine-tune</button>
+                <div id="adv" hidden></div>
             </section>
             <section class="card pane" id="t-pp" hidden>
                 <h2 class="pt">Ping-pong</h2>
@@ -749,8 +793,13 @@
         const S = [['speed', 'Speed', 0, .6, .01], ['radius', 'Radius', .5, 8, .1], ['height', 'Height', 0, 2, .05], ['depth', 'Depth', 0, 1, .01], ['reverb', 'Reverb', 0, 1, .01], ['bass', 'Bass boost', 0, 12, .5], ['width', 'Band spread', 0, 1.5, .05]];
         const PR = { 'Subtle': { speed: .07, radius: 1.5, height: .2, depth: .2, reverb: .15, mode: 'orbit' }, 'Classic 8D': { speed: .15, radius: 3, height: .6, depth: .5, reverb: .3, mode: 'orbit' }, 'Concert Hall': { speed: .05, radius: 6, height: .8, depth: .8, reverb: .75, mode: 'orbit' }, 'Dance Floor': { speed: .3, radius: 4, height: .4, depth: .4, reverb: .2, bass: 6, mode: 'fig8' }, 'Spiral Dive': { speed: .2, radius: 5, height: 1.5, depth: .9, reverb: .4, mode: 'spiral' }, 'Chaos': { speed: .45, radius: 5, height: 1.2, depth: .7, reverb: .35, mode: 'chaos' } };
         for (const k in PR) { const b = document.createElement('button'); b.className = 'chip'; b.textContent = k; b.onclick = () => { Object.assign(P, { bass: 0, width: 1 }, PR[k]); $('#mode').value = P.mode; mkSliders(); apply(); document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c == b)); toast(k + ' preset') }; $('#chips').append(b) }
-        function mkSliders() { $('#sliders').textContent = ''; $('#adv').textContent = ''; for (const [k, l, mn, mx, st] of S) { const d = document.createElement('label'); d.className = 'sl'; d.innerHTML = `<span>${l}</span><input type="range" min="${mn}" max="${mx}" step="${st}" aria-label="${l}"><output></output>`; const i = d.children[1], v = d.children[2]; i.value = P[k]; v.textContent = P[k]; i.oninput = () => { P[k] = +i.value; v.textContent = i.value; apply() }; (['speed', 'radius', 'reverb'].includes(k) ? $('#sliders') : $('#adv')).append(d) } }
+        function mkSliders() { $('#sliders').textContent = ''; $('#adv').textContent = ''; for (const [k, l, mn, mx, st] of S) { const d = document.createElement('label'); d.className = 'sl'; d.innerHTML = `<span>${l}</span><input type="range" min="${mn}" max="${mx}" step="${st}" aria-label="${l}"><output></output>`; const i = d.children[1], v = d.children[2]; i.value = P[k]; v.textContent = i.value; i.oninput = () => { P[k] = +i.value; v.textContent = i.value; apply() }; (['speed', 'radius', 'reverb'].includes(k) ? $('#sliders') : $('#adv')).append(d) } }
         mkSliders();
+        $('#fineTuneToggle').onclick = () => {
+            const open = $('#fineTuneToggle').getAttribute('aria-expanded') === 'true';
+            $('#fineTuneToggle').setAttribute('aria-expanded', String(!open));
+            $('#adv').hidden = open;
+        };
 
         $('#mode').onchange = e => P.mode = e.target.value;
         $('#on').onclick = () => { on9 = !on9; $('#on').classList.toggle('on', on9); $('#on').textContent = on9 ? '9D on' : '9D off'; apply() };
@@ -810,7 +859,7 @@
         async function load() { await DBP; const all = await tx('readonly', s => s.getAll()); lib = all || []; render() }
         async function add(files) {
             const ok = [...files].filter(f => f.type.startsWith('audio/') || /\.(mp3|m4a|wav|ogg|flac|aac|opus|wma)$/i.test(f.name));
-            for (const f of ok) { const t = { name: f.name.replace(/\.[^.]+$/, ''), blob: f }; const id = await tx('readwrite', s => s.add(t)); if (id) t.id = id; lib.push(t) } render(); toast(ok.length ? ok.length + ' song' + (ok.length == 1 ? '' : 's') + ' added' : 'No audio files found'); if (cur < 0 && lib.length) { playIdx(0, false); if (innerWidth < 900) goTab('player') }
+            for (const f of ok) { const t = { name: f.name.replace(/\.[^.]+$/, ''), blob: f }; const id = await tx('readwrite', s => s.add(t)); if (id) t.id = id; lib.push(t) } render(); toast(ok.length ? ok.length + ' song' + (ok.length == 1 ? '' : 's') + ' added' : 'No audio files found'); if (cur < 0 && lib.length) { playIdx(0, false); if (matchMedia('(max-width:899px)').matches) goTab('player') }
         }
         $('#addf').onclick = () => $('#fi').click(); $('#addd').onclick = () => $('#fd').click();
         $('#fi').onchange = e => { add(e.target.files); e.target.value = '' }; $('#fd').onchange = e => { add(e.target.files); e.target.value = '' };
@@ -856,7 +905,6 @@
         function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1800) }
         let curTab = 'lib'; function goTab(t) { curTab = t; document.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', x.dataset.tab == t)); document.querySelectorAll('.pane').forEach(p => p.hidden = p.id !== 't-' + t); scrollTo(0, 0) }
         document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => goTab(b.dataset.tab));
-        matchMedia('(min-width:900px)').onchange = e => { if (e.matches && curTab == 'player') goTab('lib') };
         $('#on').addEventListener('click', () => { $('#on').setAttribute('aria-pressed', on9); toast(on9 ? '9D on' : '9D off') });
         $('#pp').addEventListener('click', () => toast(ppOn ? 'Ping-pong on' : 'Ping-pong off'));
         (function () {
