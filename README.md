@@ -1,1 +1,1 @@
-NONE OF YOUR BUSINNESS
+Note that most visual features of this website is heavily vibe-coded
